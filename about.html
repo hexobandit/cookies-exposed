@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn about Cookies Exposed - an educational project to raise awareness about browser cookie security and privacy implications.">
+    <meta name="keywords" content="cookie security education, privacy awareness, browser security, educational tool">
+    <meta name="author" content="Cookies Exposed">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="About Cookies Exposed - Educational Cookie Security Project">
+    <meta property="og:description" content="Learn about our mission to educate users about browser cookie security and privacy.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cookies-exposed.com/about.html">
+    
+    <title>About - Cookies Exposed Educational Project</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>ℹ️</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="container">
+                <div class="nav-content">
+                    <a href="/" class="logo">
+                        <div class="logo-icon">🍪</div>
+                        Cookies Exposed
+                    </a>
+                    
+                    <ul class="nav-menu">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="cookie-scanner.html">Cookie Scanner</a></li>
+                        <li class="nav-dropdown">
+                            <a href="#" class="dropdown-toggle">Attack Demos ▼</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="session-hijacking.html">Session Hijacking</a></li>
+                                <li><a href="xss-demo.html">XSS Cookie Theft</a></li>
+                                <li><a href="csrf-demo.html">CSRF Attacks</a></li>
+                                <li><a href="mitm-demo.html">Man-in-the-Middle</a></li>
+                                <li><a href="cookie-poisoning.html">Cookie Poisoning</a></li>
+                                <li><a href="tracking-demo.html">Tracking & Profiling</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="about.html" class="active">About</a></li>
+                        <li><a href="privacy.html">Privacy</a></li>
+                    </ul>
+                    
+                    <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- About Section -->
+    <section class="section">
+        <div class="container-sm">
+            <div class="section-header">
+                <h1 class="section-title">About Cookies Exposed</h1>
+                <p class="section-subtitle">An educational project dedicated to raising awareness about browser cookie security and privacy implications.</p>
+            </div>
+
+            <!-- Mission Statement -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <div class="card-icon">🎯</div>
+                        Our Mission
+                    </h2>
+                </div>
+                
+                <p>Cookies Exposed exists to bridge the knowledge gap between everyday internet users and the complex world of browser cookies. While cookies are essential for modern web functionality, many users don't understand their security and privacy implications.</p>
+                
+                <p>Our mission is to:</p>
+                <ul>
+                    <li><strong>Educate users</strong> about what browser cookies are and how they work</li>
+                    <li><strong>Raise awareness</strong> of security risks like session hijacking, XSS, and CSRF attacks</li>
+                    <li><strong>Promote privacy consciousness</strong> regarding cross-site tracking and data collection</li>
+                    <li><strong>Provide practical tools</strong> for analyzing and understanding your own cookies</li>
+                    <li><strong>Empower users</strong> to make informed decisions about their online privacy</li>
+                </ul>
+
+                <div class="alert alert-info">
+                    <strong>💡 Why This Matters:</strong> With increasing digital surveillance, data breaches, and privacy regulations like GDPR and CCPA, understanding cookies is crucial for maintaining your online privacy and security.
+                </div>
+            </div>
+
+            <!-- Why We Built This -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <div class="card-icon">🚀</div>
+                        Why We Built This
+                    </h2>
+                </div>
+                
+                <h3>The Problem</h3>
+                <p>Despite cookies being fundamental to web security and privacy, most users lack understanding of:</p>
+                <ul>
+                    <li>How cookies enable both functionality and tracking</li>
+                    <li>The difference between session, persistent, and third-party cookies</li>
+                    <li>Security attributes like Secure, HttpOnly, and SameSite flags</li>
+                    <li>How attackers exploit cookies in various cyber attacks</li>
+                    <li>What users can do to protect themselves</li>
+                </ul>
+
+                <h3>Our Solution</h3>
+                <p>We created an interactive, educational platform that:</p>
+                <ul>
+                    <li><strong>Explains complex concepts</strong> in accessible, non-technical language</li>
+                    <li><strong>Provides hands-on analysis</strong> of real cookies in your browser</li>
+                    <li><strong>Demonstrates security risks</strong> with practical examples</li>
+                    <li><strong>Offers actionable advice</strong> for improving privacy and security</li>
+                    <li><strong>Maintains complete privacy</strong> by processing everything locally</li>
+                </ul>
+            </div>
+
+            <!-- Educational Approach -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <div class="card-icon">📚</div>
+                        Our Educational Approach
+                    </h2>
+                </div>
+                
+                <div class="grid grid-2">
+                    <div>
+                        <h3>🎓 Progressive Learning</h3>
+                        <ul>
+                            <li>Start with basic cookie concepts</li>
+                            <li>Gradually introduce security topics</li>
+                            <li>Build up to advanced attack vectors</li>
+                            <li>Conclude with practical protection methods</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3>🔬 Hands-On Discovery</h3>
+                        <ul>
+                            <li>Interactive cookie scanner tool</li>
+                            <li>Real-time analysis of your cookies</li>
+                            <li>Risk assessment and explanations</li>
+                            <li>Practical recommendations</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3>🛡️ Security-First Design</h3>
+                        <ul>
+                            <li>All analysis happens locally</li>
+                            <li>No data sent to external servers</li>
+                            <li>Privacy-preserving techniques</li>
+                            <li>Open about our own practices</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3>🌍 Accessible to All</h3>
+                        <ul>
+                            <li>Clear, jargon-free explanations</li>
+                            <li>Multiple learning formats</li>
+                            <li>Responsive design for all devices</li>
+                            <li>Dark/light themes for accessibility</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technology & Privacy -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <div class="card-icon">⚙️</div>
+                        Technology & Privacy by Design
+                    </h2>
+                </div>
+                
+                <h3>Technical Implementation</h3>
+                <ul>
+                    <li><strong>Client-Side Processing:</strong> All cookie analysis happens in your browser using JavaScript</li>
+                    <li><strong>No Backend Database:</strong> We don't store or collect your cookie data</li>
+                    <li><strong>Modern Web Standards:</strong> Built with HTML5, CSS3, and vanilla JavaScript</li>
+                    <li><strong>Security Headers:</strong> Implemented CSP, HSTS, and other security measures</li>
+                    <li><strong>Responsive Design:</strong> Works on desktop, tablet, and mobile devices</li>
+                </ul>
+
+                <h3>Privacy by Design Principles</h3>
+                <ul>
+                    <li><strong>Proactive not Reactive:</strong> Privacy protection built into the system from the start</li>
+                    <li><strong>Privacy as the Default:</strong> No opt-out required - privacy is the default state</li>
+                    <li><strong>Full Functionality:</strong> Achieving education goals without compromising privacy</li>
+                    <li><strong>End-to-End Security:</strong> Comprehensive security measures throughout</li>
+                    <li><strong>Visibility and Transparency:</strong> Open about our practices and methods</li>
+                </ul>
+
+                <div class="alert alert-success">
+                    <strong>🔒 Privacy Guarantee:</strong> Your cookie data never leaves your device. Our scanner tool works entirely in your browser, ensuring your sensitive information remains private.
+                </div>
+            </div>
+
+            <!-- Who This Is For -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <div class="card-icon">👥</div>
+                        Who This Is For
+                    </h2>
+                </div>
+                
+                <div class="grid grid-2">
+                    <div>
+                        <h3>🏠 Everyday Users</h3>
+                        <ul>
+                            <li>People concerned about online privacy</li>
+                            <li>Users wanting to understand cookie notices</li>
+                            <li>Those curious about browser security</li>
+                            <li>Anyone seeking digital literacy</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3>🎓 Students & Educators</h3>
+                        <ul>
+                            <li>Computer science students</li>
+                            <li>Cybersecurity learners</li>
+                            <li>Web development students</li>
+                            <li>Digital literacy educators</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3>💼 Professionals</h3>
+                        <ul>
+                            <li>Web developers and designers</li>
+                            <li>Security professionals</li>
+                            <li>Privacy officers and compliance teams</li>
+                            <li>Digital marketers (ethical practices)</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3>🏢 Organizations</h3>
+                        <ul>
+                            <li>Companies implementing cookie policies</li>
+                            <li>Privacy-focused organizations</li>
+                            <li>Educational institutions</li>
+                            <li>Non-profits promoting digital rights</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features & Tools -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <div class="card-icon">🛠️</div>
+                        Features & Tools
+                    </h2>
+                </div>
+                
+                <h3>📖 Educational Content</h3>
+                <ul>
+                    <li><strong>Comprehensive Cookie Guide:</strong> From basics to advanced security concepts</li>
+                    <li><strong>Security Risk Explanations:</strong> Detailed coverage of attacks like XSS, CSRF, and session hijacking</li>
+                    <li><strong>Privacy Implications:</strong> Understanding tracking, profiling, and data collection</li>
+                    <li><strong>Best Practices:</strong> Practical advice for users and developers</li>
+                </ul>
+
+                <h3>🔍 Interactive Cookie Scanner</h3>
+                <ul>
+                    <li><strong>Real-Time Analysis:</strong> Examine cookies currently in your browser</li>
+                    <li><strong>Risk Assessment:</strong> Automated evaluation of security and privacy risks</li>
+                    <li><strong>Detailed Explanations:</strong> Learn why each cookie might be concerning</li>
+                    <li><strong>Export Capabilities:</strong> Save your analysis for further review</li>
+                </ul>
+
+                <h3>🎨 User Experience</h3>
+                <ul>
+                    <li><strong>Dark/Light Themes:</strong> Choose your preferred viewing mode</li>
+                    <li><strong>Responsive Design:</strong> Works seamlessly on all devices</li>
+                    <li><strong>Accessible Interface:</strong> Designed for users with different abilities</li>
+                    <li><strong>Fast Loading:</strong> Optimized for quick access to information</li>
+                </ul>
+            </div>
+
+            <!-- Limitations & Disclaimers -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <div class="card-icon">⚠️</div>
+                        Important Limitations
+                    </h2>
+                </div>
+                
+                <h3>Technical Limitations</h3>
+                <ul>
+                    <li><strong>JavaScript-Only Access:</strong> Our scanner can only see cookies accessible to JavaScript (not HttpOnly cookies)</li>
+                    <li><strong>Limited Cookie Attributes:</strong> Some cookie properties are not available through browser APIs</li>
+                    <li><strong>Browser Restrictions:</strong> Different browsers may limit what information is available</li>
+                    <li><strong>Cross-Origin Limitations:</strong> We can't analyze cookies from other domains</li>
+                </ul>
+
+                <h3>Educational Scope</h3>
+                <ul>
+                    <li><strong>General Education:</strong> This is educational content, not professional security advice</li>
+                    <li><strong>Rapidly Evolving Field:</strong> Web security constantly changes; information may become outdated</li>
+                    <li><strong>Browser Differences:</strong> Cookie behavior may vary between different browsers</li>
+                    <li><strong>Complexity Simplified:</strong> We simplify complex topics for accessibility</li>
+                </ul>
+
+                <div class="alert alert-warning">
+                    <strong>⚠️ Disclaimer:</strong> While we strive for accuracy, this tool is for educational purposes only. For critical security decisions, consult with cybersecurity professionals and refer to official browser and security documentation.
+                </div>
+            </div>
+
+            <!-- Future Development -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <div class="card-icon">🔮</div>
+                        Future Development
+                    </h2>
+                </div>
+                
+                <h3>Planned Enhancements</h3>
+                <ul>
+                    <li><strong>Advanced Analysis:</strong> More sophisticated risk assessment algorithms</li>
+                    <li><strong>Browser Extension:</strong> Real-time cookie monitoring across all websites</li>
+                    <li><strong>Educational Games:</strong> Interactive learning experiences</li>
+                    <li><strong>Mobile App:</strong> Native mobile application for cookie education</li>
+                    <li><strong>Multi-Language Support:</strong> Content in multiple languages</li>
+                    <li><strong>Video Tutorials:</strong> Visual learning content</li>
+                </ul>
+
+                <h3>Community Contributions</h3>
+                <ul>
+                    <li><strong>Open Source:</strong> Consider making components open source</li>
+                    <li><strong>Expert Reviews:</strong> Collaborate with security professionals</li>
+                    <li><strong>User Feedback:</strong> Incorporate user suggestions and improvements</li>
+                    <li><strong>Educational Partnerships:</strong> Work with schools and universities</li>
+                </ul>
+            </div>
+
+            <!-- Contact & Feedback -->
+            <div class="card bg-secondary">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <div class="card-icon">📬</div>
+                        Contact & Feedback
+                    </h2>
+                </div>
+                
+                <h3>We'd Love to Hear From You</h3>
+                <p>This project is driven by community needs and feedback. We welcome:</p>
+                
+                <div class="grid grid-2">
+                    <div>
+                        <h4>📝 Content Suggestions</h4>
+                        <ul>
+                            <li>Topics you'd like us to cover</li>
+                            <li>Corrections or updates needed</li>
+                            <li>Requests for clarification</li>
+                            <li>Additional examples or scenarios</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4>🔧 Technical Feedback</h4>
+                        <ul>
+                            <li>Bug reports or issues</li>
+                            <li>Feature requests</li>
+                            <li>Accessibility improvements</li>
+                            <li>Performance suggestions</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>How to Reach Us</h3>
+                <ul>
+                    <li><strong>Issues & Bugs:</strong> Report technical problems through our GitHub repository</li>
+                    <li><strong>Educational Content:</strong> Suggest improvements to our educational materials</li>
+                    <li><strong>Privacy Concerns:</strong> Contact us about privacy-related questions</li>
+                    <li><strong>Partnerships:</strong> Discuss educational collaborations or partnerships</li>
+                </ul>
+
+                <div class="alert alert-info">
+                    <strong>📧 Response Time:</strong> We aim to respond to all inquiries within 7 days. For urgent security issues, we prioritize faster responses.
+                </div>
+            </div>
+
+            <!-- Thank You -->
+            <div class="card text-center">
+                <h2>Thank You for Learning About Cookie Security</h2>
+                <p>By understanding browser cookies and their implications, you're taking an important step toward better online privacy and security. Knowledge is the foundation of digital safety.</p>
+                
+                <div class="flex flex-center" style="gap: 1rem; flex-wrap: wrap;">
+                    <a href="cookie-scanner.html" class="btn btn-primary">Try Our Cookie Scanner</a>
+                    <a href="/" class="btn btn-secondary">Back to Learning</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="cookie-scanner.html">Cookie Scanner</a>
+                    <a href="about.html">About</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+                <p>&copy; 2024 Cookies Exposed. This is an educational tool designed to raise awareness about browser cookie security and privacy. All analysis is performed locally in your browser.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>

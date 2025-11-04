@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn about browser cookies, their security risks, privacy implications, and how to protect yourself. Comprehensive guide to cookie security and privacy awareness.">
+    <meta name="keywords" content="browser cookies, security, privacy, XSS, CSRF, session hijacking, tracking, web security">
+    <meta name="author" content="Cookies Exposed">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Cookies Exposed - Browser Cookie Security Awareness">
+    <meta property="og:description" content="Comprehensive guide to understanding browser cookies, their risks, and how to protect your privacy online.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cookies-exposed.com">
+    <meta property="og:image" content="https://cookies-exposed.com/images/og-image.png">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cookies Exposed - Browser Cookie Security Awareness">
+    <meta name="twitter:description" content="Learn about browser cookies, security risks, and privacy protection.">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Cookies Exposed",
+      "description": "Educational website about browser cookie security and privacy",
+      "url": "https://cookies-exposed.com",
+      "author": {
+        "@type": "Organization",
+        "name": "Cookies Exposed"
+      },
+      "educationalUse": "Security awareness and privacy education"
+    }
+    </script>
+    
+    <title>Cookies Exposed - Browser Cookie Security & Privacy Awareness</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍪</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="container">
+                <div class="nav-content">
+                    <a href="/" class="logo">
+                        <div class="logo-icon">🍪</div>
+                        Cookies Exposed
+                    </a>
+                    
+                    <ul class="nav-menu">
+                        <li><a href="/" class="active">Home</a></li>
+                        <li><a href="cookie-scanner.html">Cookie Scanner</a></li>
+                        <li class="nav-dropdown">
+                            <a href="#" class="dropdown-toggle">Attack Demos ▼</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="session-hijacking.html">Session Hijacking</a></li>
+                                <li><a href="xss-demo.html">XSS Cookie Theft</a></li>
+                                <li><a href="csrf-demo.html">CSRF Attacks</a></li>
+                                <li><a href="mitm-demo.html">Man-in-the-Middle</a></li>
+                                <li><a href="cookie-poisoning.html">Cookie Poisoning</a></li>
+                                <li><a href="tracking-demo.html">Tracking & Profiling</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="privacy.html">Privacy</a></li>
+                    </ul>
+                    
+                    <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Understanding Browser Cookies</h1>
+                <p>Learn about the small pieces of data that websites store in your browser, their security implications, and how they affect your privacy online.</p>
+                <div class="flex flex-center" style="gap: 1rem; flex-wrap: wrap;">
+                    <a href="cookie-scanner.html" class="btn btn-primary">Analyze Your Cookies</a>
+                    <a href="#what-are-cookies" class="btn btn-secondary">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Are Cookies Section -->
+    <section id="what-are-cookies" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">What Are Browser Cookies?</h2>
+                <p class="section-subtitle">Cookies are small text files that websites store in your browser to remember information about you and your preferences.</p>
+            </div>
+            
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">📝</div>
+                            How Cookies Work
+                        </h3>
+                    </div>
+                    <p>When you visit a website, it can send small pieces of data called cookies to your browser. These cookies are stored locally and sent back to the website on subsequent visits.</p>
+                    <ul>
+                        <li><strong>Set by websites:</strong> Servers send cookies via HTTP headers</li>
+                        <li><strong>Stored locally:</strong> Your browser saves them on your device</li>
+                        <li><strong>Sent automatically:</strong> Included in future requests to the same site</li>
+                        <li><strong>Have attributes:</strong> Domain, path, expiration, security flags</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">🎯</div>
+                            Common Uses
+                        </h3>
+                    </div>
+                    <p>Cookies serve many legitimate purposes that improve your browsing experience:</p>
+                    <ul>
+                        <li><strong>Authentication:</strong> Keep you logged in to websites</li>
+                        <li><strong>Preferences:</strong> Remember your settings and choices</li>
+                        <li><strong>Shopping carts:</strong> Store items you've added for purchase</li>
+                        <li><strong>Analytics:</strong> Help websites understand user behavior</li>
+                        <li><strong>Personalization:</strong> Customize content for you</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Types of Cookies Section -->
+    <section id="cookie-types" class="section bg-secondary">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Types of Cookies</h2>
+                <p class="section-subtitle">Understanding different cookie types helps you assess their security and privacy implications.</p>
+            </div>
+            
+            <div class="grid grid-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">⏱️</div>
+                            Session Cookies
+                        </h3>
+                    </div>
+                    <div class="risk-badge risk-low">Low Risk</div>
+                    <p>Temporary cookies that expire when you close your browser. They're used for session management and don't persist between browser sessions.</p>
+                    <strong>Security Impact:</strong>
+                    <ul>
+                        <li>Limited lifetime reduces exposure</li>
+                        <li>Good for authentication sessions</li>
+                        <li>Automatically cleaned up</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">💾</div>
+                            Persistent Cookies
+                        </h3>
+                    </div>
+                    <div class="risk-badge risk-medium">Medium Risk</div>
+                    <p>Cookies with set expiration dates that survive browser restarts. They can store data for days, months, or even years.</p>
+                    <strong>Security Impact:</strong>
+                    <ul>
+                        <li>Longer exposure window</li>
+                        <li>Can be used for tracking</li>
+                        <li>May contain sensitive data</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">🌐</div>
+                            Third-Party Cookies
+                        </h3>
+                    </div>
+                    <div class="risk-badge risk-high">High Risk</div>
+                    <p>Cookies set by domains other than the one you're visiting. Often used for advertising and cross-site tracking.</p>
+                    <strong>Privacy Impact:</strong>
+                    <ul>
+                        <li>Enable cross-site tracking</li>
+                        <li>Build detailed user profiles</li>
+                        <li>Often blocked by modern browsers</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">🔒</div>
+                            Secure Cookies
+                        </h3>
+                    </div>
+                    <div class="risk-badge risk-low">Low Risk</div>
+                    <p>Cookies marked with the 'Secure' flag that are only sent over encrypted HTTPS connections.</p>
+                    <strong>Security Features:</strong>
+                    <ul>
+                        <li>Protected from network eavesdropping</li>
+                        <li>Cannot be sent over HTTP</li>
+                        <li>Best practice for sensitive data</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">🚫</div>
+                            HttpOnly Cookies
+                        </h3>
+                    </div>
+                    <div class="risk-badge risk-low">Low Risk</div>
+                    <p>Cookies that cannot be accessed by JavaScript, providing protection against XSS attacks.</p>
+                    <strong>Security Benefits:</strong>
+                    <ul>
+                        <li>Immune to JavaScript access</li>
+                        <li>Protects against XSS attacks</li>
+                        <li>Server-only access</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">🛡️</div>
+                            SameSite Cookies
+                        </h3>
+                    </div>
+                    <div class="risk-badge risk-low">Low Risk</div>
+                    <p>Cookies with SameSite attributes that control when cookies are sent with cross-site requests.</p>
+                    <strong>CSRF Protection:</strong>
+                    <ul>
+                        <li><code>Strict</code>: Never sent cross-site</li>
+                        <li><code>Lax</code>: Sent on top-level navigation</li>
+                        <li><code>None</code>: Always sent (requires Secure)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Risks Section -->
+    <section id="security-risks" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Security Risks & Attack Vectors</h2>
+                <p class="section-subtitle">Understanding how cookies can be exploited helps you recognize and prevent security threats.</p>
+            </div>
+            
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">🔓</div>
+                            Session Hijacking
+                        </h3>
+                    </div>
+                    <div class="risk-badge risk-critical">Critical Risk</div>
+                    <p>Attackers steal session cookies to impersonate users and gain unauthorized access to accounts.</p>
+                    <strong>Attack Methods:</strong>
+                    <ul>
+                        <li>Network sniffing on unsecured connections</li>
+                        <li>Cross-site scripting (XSS) attacks</li>
+                        <li>Malware on compromised devices</li>
+                        <li>Man-in-the-middle attacks</li>
+                    </ul>
+                    <a href="session-hijacking.html" class="btn btn-danger btn-sm mt-md">🧪 Try Interactive Demo</a>
+                    <strong>Protection:</strong>
+                    <ul>
+                        <li>Use HTTPS everywhere</li>
+                        <li>Enable HttpOnly flags</li>
+                        <li>Implement proper session management</li>
+                        <li>Regular session rotation</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">⚡</div>
+                            Cross-Site Scripting (XSS)
+                        </h3>
+                    </div>
+                    <div class="risk-badge risk-high">High Risk</div>
+                    <p>Malicious scripts injected into websites can steal cookies and sensitive information.</p>
+                    <strong>Impact:</strong>
+                    <ul>
+                        <li>Theft of authentication cookies</li>
+                        <li>Account takeover</li>
+                        <li>Data exfiltration</li>
+                        <li>Malicious actions on behalf of users</li>
+                    </ul>
+                    <a href="xss-demo.html" class="btn btn-danger btn-sm mt-md">🧪 Try Interactive Demo</a>
+                    <strong>Prevention:</strong>
+                    <ul>
+                        <li>HttpOnly cookie flags</li>
+                        <li>Content Security Policy (CSP)</li>
+                        <li>Input validation and output encoding</li>
+                        <li>Regular security testing</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">🎭</div>
+                            Cross-Site Request Forgery (CSRF)
+                        </h3>
+                    </div>
+                    <div class="risk-badge risk-high">High Risk</div>
+                    <p>Attackers trick users into performing unwanted actions on sites where they're authenticated.</p>
+                    <strong>How It Works:</strong>
+                    <ul>
+                        <li>Malicious site sends request to target site</li>
+                        <li>Browser automatically includes cookies</li>
+                        <li>Target site processes request as legitimate</li>
+                        <li>Unwanted actions performed (transfers, changes)</li>
+                    </ul>
+                    <strong>Defense:</strong>
+                    <ul>
+                        <li>SameSite cookie attributes</li>
+                        <li>CSRF tokens</li>
+                        <li>Origin header validation</li>
+                        <li>User interaction confirmation</li>
+                    </ul>
+                    <a href="csrf-demo.html" class="btn btn-danger btn-sm mt-md">🧪 Try Interactive Demo</a>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">👁️</div>
+                            Cross-Site Tracking
+                        </h3>
+                    </div>
+                    <div class="risk-badge risk-medium">Privacy Risk</div>
+                    <p>Third-party cookies enable tracking users across multiple websites to build detailed profiles.</p>
+                    <strong>Tracking Methods:</strong>
+                    <ul>
+                        <li>Third-party advertising cookies</li>
+                        <li>Social media widgets</li>
+                        <li>Analytics services</li>
+                        <li>Browser fingerprinting</li>
+                    </ul>
+                    <strong>Privacy Protection:</strong>
+                    <ul>
+                        <li>Block third-party cookies</li>
+                        <li>Use privacy-focused browsers</li>
+                        <li>Enable tracking protection</li>
+                        <li>Regular cookie clearing</li>
+                    </ul>
+                    <a href="tracking-demo.html" class="btn btn-warning btn-sm mt-md">🧪 Try Interactive Demo</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Interactive Attack Demos Section -->
+    <section class="section" style="background: var(--bg-secondary);">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">🧪 Interactive Attack Demonstrations</h2>
+                <p class="section-subtitle">Experience realistic simulations of cookie-based attacks in a safe, educational environment.</p>
+            </div>
+            
+            <div class="grid grid-3">
+                <a href="session-hijacking.html" class="demo-card">
+                    <div class="demo-icon">🎭</div>
+                    <h3>Session Hijacking</h3>
+                    <p>Learn how attackers steal session cookies to impersonate users</p>
+                    <div class="demo-badge critical">Critical</div>
+                </a>
+                
+                <a href="xss-demo.html" class="demo-card">
+                    <div class="demo-icon">💉</div>
+                    <h3>XSS Cookie Theft</h3>
+                    <p>See how malicious scripts can steal cookies through XSS vulnerabilities</p>
+                    <div class="demo-badge high">High Risk</div>
+                </a>
+                
+                <a href="csrf-demo.html" class="demo-card">
+                    <div class="demo-icon">🔄</div>
+                    <h3>CSRF Attacks</h3>
+                    <p>Understand how websites can perform actions using your cookies</p>
+                    <div class="demo-badge high">High Risk</div>
+                </a>
+                
+                <a href="mitm-demo.html" class="demo-card">
+                    <div class="demo-icon">🕵️</div>
+                    <h3>Man-in-the-Middle</h3>
+                    <p>Discover how attackers intercept cookies on unsecured networks</p>
+                    <div class="demo-badge medium">Medium Risk</div>
+                </a>
+                
+                <a href="cookie-poisoning.html" class="demo-card">
+                    <div class="demo-icon">☠️</div>
+                    <h3>Cookie Poisoning</h3>
+                    <p>Explore how cookie manipulation can lead to privilege escalation</p>
+                    <div class="demo-badge medium">Medium Risk</div>
+                </a>
+                
+                <a href="tracking-demo.html" class="demo-card">
+                    <div class="demo-icon">👁️</div>
+                    <h3>Tracking & Profiling</h3>
+                    <p>See how cookies enable cross-site tracking and user profiling</p>
+                    <div class="demo-badge privacy">Privacy Risk</div>
+                </a>
+            </div>
+            
+            <div class="text-center mt-xl">
+                <div class="demo-cta">
+                    <h3>🎯 Safe & Educational</h3>
+                    <p>All demonstrations are completely safe simulations designed for learning. No real attacks are performed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Practices Section -->
+    <section id="best-practices" class="section bg-secondary">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Best Practices for Users</h2>
+                <p class="section-subtitle">Practical steps you can take to protect your privacy and security while browsing.</p>
+            </div>
+            
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">⚙️</div>
+                            Browser Settings
+                        </h3>
+                    </div>
+                    <ul>
+                        <li><strong>Block third-party cookies:</strong> Prevent cross-site tracking</li>
+                        <li><strong>Clear cookies regularly:</strong> Remove accumulated tracking data</li>
+                        <li><strong>Use incognito/private mode:</strong> For sensitive browsing</li>
+                        <li><strong>Enable "Do Not Track":</strong> Signal your privacy preference</li>
+                        <li><strong>Review cookie permissions:</strong> Control which sites can set cookies</li>
+                        <li><strong>Use HTTPS everywhere:</strong> Ensure encrypted connections</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">🛡️</div>
+                            Security Tools
+                        </h3>
+                    </div>
+                    <ul>
+                        <li><strong>Browser extensions:</strong> uBlock Origin, Privacy Badger</li>
+                        <li><strong>VPN services:</strong> Hide your IP and encrypt traffic</li>
+                        <li><strong>Antivirus software:</strong> Detect and remove malware</li>
+                        <li><strong>Firewall protection:</strong> Block malicious connections</li>
+                        <li><strong>Regular updates:</strong> Keep browser and OS current</li>
+                        <li><strong>Security audits:</strong> Regular cookie and privacy reviews</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">🔍</div>
+                            What to Look For
+                        </h3>
+                    </div>
+                    <ul>
+                        <li><strong>Unusual cookies:</strong> From unfamiliar domains</li>
+                        <li><strong>Long expiration dates:</strong> Persistent tracking cookies</li>
+                        <li><strong>Large cookie values:</strong> May contain sensitive data</li>
+                        <li><strong>Missing security flags:</strong> Secure, HttpOnly, SameSite</li>
+                        <li><strong>Analytics cookies:</strong> From tracking companies</li>
+                        <li><strong>Social media cookies:</strong> From embedded widgets</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <div class="card-icon">📚</div>
+                            Stay Informed
+                        </h3>
+                    </div>
+                    <ul>
+                        <li><strong>Privacy policies:</strong> Read how sites use cookies</li>
+                        <li><strong>Cookie notices:</strong> Make informed consent choices</li>
+                        <li><strong>Security news:</strong> Stay updated on new threats</li>
+                        <li><strong>Browser features:</strong> Learn about new privacy tools</li>
+                        <li><strong>Legal changes:</strong> GDPR, CCPA, and other regulations</li>
+                        <li><strong>Best practices:</strong> Follow security recommendations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="section">
+        <div class="container">
+            <div class="card text-center">
+                <h2>Ready to Analyze Your Cookies?</h2>
+                <p>Use our cookie scanner tool to examine the cookies currently stored in your browser and understand their security implications.</p>
+                <div class="flex flex-center" style="gap: 1rem; flex-wrap: wrap;">
+                    <a href="cookie-scanner.html" class="btn btn-primary">Start Cookie Analysis</a>
+                    <a href="about.html" class="btn btn-secondary">Learn About This Tool</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="cookie-scanner.html">Cookie Scanner</a>
+                    <a href="about.html">About</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+                <p>&copy; 2024 Cookies Exposed. This is an educational tool designed to raise awareness about browser cookie security and privacy. All analysis is performed locally in your browser.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>

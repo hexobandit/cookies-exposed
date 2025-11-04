@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Hijacking Attack Demo - Cookies Exposed</title>
+    <meta name="description" content="Learn how session hijacking works through interactive demonstrations and real-world scenarios">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="container">
+                <div class="nav-content">
+                    <a href="/" class="logo">
+                        <div class="logo-icon">🍪</div>
+                        Cookies Exposed
+                    </a>
+                    
+                    <ul class="nav-menu">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="cookie-scanner.html">Cookie Scanner</a></li>
+                        <li class="nav-dropdown">
+                            <a href="#" class="dropdown-toggle">Attack Demos ▼</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="session-hijacking.html" class="active">Session Hijacking</a></li>
+                                <li><a href="xss-demo.html">XSS Cookie Theft</a></li>
+                                <li><a href="csrf-demo.html">CSRF Attacks</a></li>
+                                <li><a href="mitm-demo.html">Man-in-the-Middle</a></li>
+                                <li><a href="cookie-poisoning.html">Cookie Poisoning</a></li>
+                                <li><a href="tracking-demo.html">Tracking & Profiling</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="privacy.html">Privacy</a></li>
+                    </ul>
+                    
+                    <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-secondary">
+        <div class="container">
+            <div class="hero-content">
+                <h1>🎭 Session Hijacking Attack Demo</h1>
+                <p>Learn how attackers steal and reuse session cookies to impersonate legitimate users</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Warning Section -->
+    <section class="section">
+        <div class="container">
+            <div class="alert" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: white; text-align: center; margin-bottom: 2rem;">
+                <h3 style="margin-top: 0; color: white;">⚠️ Educational Purpose Only</h3>
+                <p style="margin-bottom: 0;">This demonstration is for security education. All examples are simulated and safe. Never attempt these attacks on real systems.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What is Session Hijacking -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>🔓 What is Session Hijacking?</h2>
+                <p>Session hijacking (also known as cookie hijacking) occurs when an attacker steals a user's session cookie and uses it to impersonate that user on a website.</p>
+                
+                <div class="grid grid-2 mt-lg">
+                    <div>
+                        <h3>How It Works:</h3>
+                        <ol>
+                            <li><strong>User logs in</strong> → Server creates session cookie</li>
+                            <li><strong>Attacker steals cookie</strong> → Various methods (shown below)</li>
+                            <li><strong>Attacker uses cookie</strong> → Impersonates user</li>
+                            <li><strong>Server trusts cookie</strong> → Grants access without re-authentication</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <h3>Real-World Impact:</h3>
+                        <ul>
+                            <li>🏦 <strong>Banking fraud</strong> - Transfer money from victim's account</li>
+                            <li>📧 <strong>Email hijacking</strong> - Read private messages, send spam</li>
+                            <li>🛒 <strong>E-commerce abuse</strong> - Make purchases with stored payment methods</li>
+                            <li>📱 <strong>Social media takeover</strong> - Post malicious content, access private data</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>🧪 Interactive Session Hijacking Simulation</h2>
+                <p>This safe simulation demonstrates how session hijacking works without any real security risks.</p>
+
+                <!-- Demo Steps -->
+                <div class="demo-container">
+                    <!-- Step 1: Normal Login -->
+                    <div class="demo-step" id="step1">
+                        <h3>Step 1: Legitimate User Login</h3>
+                        <div class="simulated-browser">
+                            <div class="browser-bar">
+                                <span>🔒 https://secure-bank.example.com/login</span>
+                            </div>
+                            <div class="browser-content">
+                                <h4>Secure Bank Login</h4>
+                                <div class="login-form">
+                                    <input type="text" placeholder="Username: alice@example.com" readonly>
+                                    <input type="password" placeholder="••••••••" readonly>
+                                    <button id="loginBtn" class="btn btn-primary">Login</button>
+                                </div>
+                                <div id="loginResult" style="display: none;">
+                                    <p class="text-success">✅ Login successful! Session created.</p>
+                                    <div class="cookie-display">
+                                        <strong>Cookie Set:</strong> 
+                                        <code>sessionId=abc123xyz789; Secure; HttpOnly; SameSite=Strict</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="proceedStep1" class="btn btn-accent mt-md" style="display: none;">Proceed to Step 2</button>
+                    </div>
+
+                    <!-- Step 2: Cookie Theft -->
+                    <div class="demo-step" id="step2" style="display: none;">
+                        <h3>Step 2: Attacker Steals Session Cookie</h3>
+                        <div class="attack-methods">
+                            <h4>Common Methods for Cookie Theft:</h4>
+                            <div class="grid grid-2">
+                                <div class="attack-method" data-method="wifi">
+                                    <h5>📶 Unsecured WiFi</h5>
+                                    <p>Attacker monitors network traffic on public WiFi</p>
+                                    <button class="btn btn-secondary method-btn">Simulate</button>
+                                </div>
+                                <div class="attack-method" data-method="malware">
+                                    <h5>🦠 Malware</h5>
+                                    <p>Malicious software reads browser cookies</p>
+                                    <button class="btn btn-secondary method-btn">Simulate</button>
+                                </div>
+                                <div class="attack-method" data-method="xss">
+                                    <h5>💉 XSS Attack</h5>
+                                    <p>Malicious script steals cookies via JavaScript</p>
+                                    <button class="btn btn-secondary method-btn">Simulate</button>
+                                </div>
+                                <div class="attack-method" data-method="phishing">
+                                    <h5>🎣 Phishing</h5>
+                                    <p>Fake website captures session after redirect</p>
+                                    <button class="btn btn-secondary method-btn">Simulate</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="theftResult" style="display: none;">
+                            <div class="alert alert-danger">
+                                <h4>🚨 Cookie Stolen!</h4>
+                                <p>Attacker now has: <code id="stolenCookie">sessionId=abc123xyz789</code></p>
+                                <p><strong>Method used:</strong> <span id="theftMethod"></span></p>
+                            </div>
+                            <button id="proceedStep2" class="btn btn-accent mt-md">Proceed to Step 3</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Impersonation -->
+                    <div class="demo-step" id="step3" style="display: none;">
+                        <h3>Step 3: Attacker Uses Stolen Cookie</h3>
+                        <div class="simulated-browser">
+                            <div class="browser-bar">
+                                <span>🔒 https://secure-bank.example.com/account</span>
+                            </div>
+                            <div class="browser-content">
+                                <div class="attacker-browser">
+                                    <h4>Attacker's Browser</h4>
+                                    <p>Attacker manually sets the stolen cookie:</p>
+                                    <div class="code-block">
+                                        <code>document.cookie = "sessionId=abc123xyz789";</code>
+                                    </div>
+                                    <button id="impersonateBtn" class="btn btn-danger">Access Victim's Account</button>
+                                </div>
+                                
+                                <div id="impersonationResult" style="display: none;">
+                                    <div class="alert alert-danger">
+                                        <h4>⚠️ Successful Impersonation!</h4>
+                                        <div class="victim-account">
+                                            <h5>Alice's Bank Account</h5>
+                                            <p><strong>Balance:</strong> $5,432.10</p>
+                                            <p><strong>Recent Transactions:</strong></p>
+                                            <ul>
+                                                <li>Salary Deposit: +$3,200.00</li>
+                                                <li>Rent Payment: -$1,200.00</li>
+                                                <li>Grocery Store: -$156.78</li>
+                                            </ul>
+                                            <div class="attack-actions">
+                                                <button class="btn btn-danger btn-sm">Transfer Money</button>
+                                                <button class="btn btn-danger btn-sm">View Personal Info</button>
+                                                <button class="btn btn-danger btn-sm">Change Settings</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="showDefenses" class="btn btn-success mt-md" style="display: none;">Learn Defense Strategies</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Defense Strategies -->
+    <section class="section" id="defenseSection" style="display: none;">
+        <div class="container">
+            <div class="card">
+                <h2>🛡️ How to Prevent Session Hijacking</h2>
+                
+                <div class="grid grid-2 mt-lg">
+                    <div>
+                        <h3>For Website Developers:</h3>
+                        <ul class="defense-list">
+                            <li>
+                                <strong>Use HTTPS everywhere</strong>
+                                <p>Encrypt all communication to prevent eavesdropping</p>
+                                <code>Strict-Transport-Security: max-age=31536000</code>
+                            </li>
+                            <li>
+                                <strong>Set HttpOnly flag</strong>
+                                <p>Prevents JavaScript from accessing cookies</p>
+                                <code>Set-Cookie: sessionId=xyz; HttpOnly</code>
+                            </li>
+                            <li>
+                                <strong>Use Secure flag</strong>
+                                <p>Only send cookies over HTTPS connections</p>
+                                <code>Set-Cookie: sessionId=xyz; Secure</code>
+                            </li>
+                            <li>
+                                <strong>Implement SameSite</strong>
+                                <p>Prevents cross-site request forgery</p>
+                                <code>Set-Cookie: sessionId=xyz; SameSite=Strict</code>
+                            </li>
+                            <li>
+                                <strong>Short session timeouts</strong>
+                                <p>Limit the window of opportunity</p>
+                            </li>
+                            <li>
+                                <strong>IP validation</strong>
+                                <p>Detect when session is used from different IP</p>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3>For Users:</h3>
+                        <ul class="defense-list">
+                            <li>
+                                <strong>Use secure networks</strong>
+                                <p>Avoid public WiFi for sensitive activities</p>
+                            </li>
+                            <li>
+                                <strong>Keep browsers updated</strong>
+                                <p>Latest security patches protect against attacks</p>
+                            </li>
+                            <li>
+                                <strong>Use antivirus software</strong>
+                                <p>Detect and remove malware that steals cookies</p>
+                            </li>
+                            <li>
+                                <strong>Log out completely</strong>
+                                <p>Clear session cookies when finished</p>
+                            </li>
+                            <li>
+                                <strong>Monitor account activity</strong>
+                                <p>Check for suspicious logins or actions</p>
+                            </li>
+                            <li>
+                                <strong>Use two-factor authentication</strong>
+                                <p>Additional security layer beyond just cookies</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Test Your Knowledge -->
+                <div class="quiz-section mt-xl">
+                    <h3>🧠 Test Your Knowledge</h3>
+                    <div class="quiz-question">
+                        <p><strong>Which cookie flag prevents JavaScript from accessing session cookies?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q1" value="secure"> Secure</label>
+                            <label><input type="radio" name="q1" value="httponly"> HttpOnly</label>
+                            <label><input type="radio" name="q1" value="samesite"> SameSite</label>
+                        </div>
+                        <button class="btn btn-primary mt-sm" onclick="checkAnswer()">Check Answer</button>
+                        <div id="quizResult" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-World Examples -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>📰 Real-World Session Hijacking Cases</h2>
+                
+                <div class="case-studies">
+                    <div class="case-study">
+                        <h3>Case 1: WiFi Pineapple Attack (2019)</h3>
+                        <p><strong>Target:</strong> Coffee shop customers using banking websites</p>
+                        <p><strong>Method:</strong> Fake WiFi hotspot captured unencrypted HTTP traffic</p>
+                        <p><strong>Impact:</strong> 200+ bank account sessions compromised</p>
+                        <p><strong>Lesson:</strong> Always use HTTPS and VPN on public networks</p>
+                    </div>
+                    
+                    <div class="case-study">
+                        <h3>Case 2: Malware Cookie Theft (2020)</h3>
+                        <p><strong>Target:</strong> Corporate employees using web-based email</p>
+                        <p><strong>Method:</strong> Trojan malware read browser cookie files</p>
+                        <p><strong>Impact:</strong> 1,500+ email accounts accessed by attackers</p>
+                        <p><strong>Lesson:</strong> Use antivirus and HttpOnly cookies</p>
+                    </div>
+                    
+                    <div class="case-study">
+                        <h3>Case 3: XSS-based Session Theft (2021)</h3>
+                        <p><strong>Target:</strong> Social media platform users</p>
+                        <p><strong>Method:</strong> Malicious script in user comments stole cookies</p>
+                        <p><strong>Impact:</strong> 50,000+ accounts compromised in 24 hours</p>
+                        <p><strong>Lesson:</strong> Proper input sanitization and CSP headers essential</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <section class="section">
+        <div class="container">
+            <div class="navigation-cards">
+                <a href="xss-demo.html" class="nav-card">
+                    <h3>Next: XSS Cookie Theft →</h3>
+                    <p>Learn how malicious scripts steal cookies</p>
+                </a>
+                <a href="index.html" class="nav-card">
+                    <h3>← Back to Home</h3>
+                    <p>Return to main educational content</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script src="app.js"></script>
+    <script>
+        // Demo interaction logic
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            document.getElementById('loginResult').style.display = 'block';
+            document.getElementById('proceedStep1').style.display = 'block';
+        });
+
+        document.getElementById('proceedStep1').addEventListener('click', () => {
+            document.getElementById('step2').style.display = 'block';
+            document.getElementById('step2').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.querySelectorAll('.method-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const method = e.target.closest('.attack-method').dataset.method;
+                const methods = {
+                    'wifi': 'Packet sniffing on unsecured WiFi network',
+                    'malware': 'Keylogger/cookie stealer malware',
+                    'xss': 'Cross-site scripting attack on vulnerable website',
+                    'phishing': 'Phishing email with malicious redirect'
+                };
+                
+                document.getElementById('theftMethod').textContent = methods[method];
+                document.getElementById('theftResult').style.display = 'block';
+                document.getElementById('proceedStep2').style.display = 'block';
+            });
+        });
+
+        document.getElementById('proceedStep2').addEventListener('click', () => {
+            document.getElementById('step3').style.display = 'block';
+            document.getElementById('step3').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.getElementById('impersonateBtn').addEventListener('click', () => {
+            document.getElementById('impersonationResult').style.display = 'block';
+            document.getElementById('showDefenses').style.display = 'block';
+        });
+
+        document.getElementById('showDefenses').addEventListener('click', () => {
+            document.getElementById('defenseSection').style.display = 'block';
+            document.getElementById('defenseSection').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="q1"]:checked');
+            const result = document.getElementById('quizResult');
+            
+            if (!selected) {
+                result.innerHTML = '<p class="text-warning">Please select an answer!</p>';
+                result.style.display = 'block';
+                return;
+            }
+            
+            if (selected.value === 'httponly') {
+                result.innerHTML = '<p class="text-success">✅ Correct! HttpOnly prevents JavaScript access to cookies.</p>';
+            } else {
+                result.innerHTML = '<p class="text-danger">❌ Incorrect. HttpOnly is the flag that prevents JavaScript access.</p>';
+            }
+            
+            result.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

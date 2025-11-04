@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Poisoning Attack Demo - Cookies Exposed</title>
+    <meta name="description" content="Learn how cookie poisoning and manipulation attacks work through interactive demonstrations and real-world scenarios">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="container">
+                <div class="nav-content">
+                    <a href="/" class="logo">
+                        <div class="logo-icon">🍪</div>
+                        Cookies Exposed
+                    </a>
+                    
+                    <ul class="nav-menu">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="cookie-scanner.html">Cookie Scanner</a></li>
+                        <li class="nav-dropdown">
+                            <a href="#" class="dropdown-toggle">Attack Demos ▼</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="session-hijacking.html">Session Hijacking</a></li>
+                                <li><a href="xss-demo.html">XSS Cookie Theft</a></li>
+                                <li><a href="csrf-demo.html">CSRF Attacks</a></li>
+                                <li><a href="mitm-demo.html">Man-in-the-Middle</a></li>
+                                <li><a href="cookie-poisoning.html" class="active">Cookie Poisoning</a></li>
+                                <li><a href="tracking-demo.html">Tracking & Profiling</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="privacy.html">Privacy</a></li>
+                    </ul>
+                    
+                    <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-secondary">
+        <div class="container">
+            <div class="hero-content">
+                <h1>🧪 Cookie Poisoning Attack Demo</h1>
+                <p>Discover how attackers manipulate cookie values to escalate privileges and bypass security controls</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Warning Section -->
+    <section class="section">
+        <div class="container">
+            <div class="alert" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: white; text-align: center; margin-bottom: 2rem;">
+                <h3 style="margin-top: 0; color: white;">⚠️ Educational Purpose Only</h3>
+                <p style="margin-bottom: 0;">This demonstration is for security education. All examples are simulated and safe. Never attempt these attacks on real systems.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What is Cookie Poisoning -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>🔬 What is Cookie Poisoning?</h2>
+                <p>Cookie poisoning (or cookie manipulation) occurs when an attacker modifies the values in cookies to gain unauthorized access, escalate privileges, or bypass security controls. Unlike session hijacking where cookies are stolen, here they are deliberately altered.</p>
+                
+                <div class="grid grid-2 mt-lg">
+                    <div>
+                        <h3>How Cookie Poisoning Works:</h3>
+                        <ol>
+                            <li><strong>Identify target cookies</strong> → Find cookies controlling access/privileges</li>
+                            <li><strong>Analyze cookie structure</strong> → Understand encoding and validation</li>
+                            <li><strong>Modify cookie values</strong> → Change to desired privileges</li>
+                            <li><strong>Submit modified cookie</strong> → Server accepts if validation is weak</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <h3>Common Attack Targets:</h3>
+                        <ul>
+                            <li>👤 <strong>User role cookies</strong> - isAdmin=true, role=administrator</li>
+                            <li>💰 <strong>Price manipulation</strong> - Shopping cart total modification</li>
+                            <li>🔐 <strong>Authentication bypass</strong> - authenticated=true values</li>
+                            <li>🎯 <strong>User ID manipulation</strong> - Access other user accounts</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cookie Structure Analysis -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>🔍 Cookie Structure Analysis</h2>
+                <p>Understanding how cookies store information is key to successful manipulation:</p>
+
+                <div class="cookie-examples">
+                    <div class="cookie-example">
+                        <h3>Vulnerable Cookie Examples</h3>
+                        <div class="cookie-display">
+                            <div class="cookie-item">
+                                <span class="cookie-name">isAdmin</span>=
+                                <span class="cookie-value vulnerable">false</span>
+                                <span class="vulnerability-note">⚠️ Plain text boolean</span>
+                            </div>
+                            <div class="cookie-item">
+                                <span class="cookie-name">userRole</span>=
+                                <span class="cookie-value vulnerable">user</span>
+                                <span class="vulnerability-note">⚠️ Unencrypted role</span>
+                            </div>
+                            <div class="cookie-item">
+                                <span class="cookie-name">cartTotal</span>=
+                                <span class="cookie-value vulnerable">125.99</span>
+                                <span class="vulnerability-note">⚠️ Client-side price storage</span>
+                            </div>
+                            <div class="cookie-item">
+                                <span class="cookie-name">userId</span>=
+                                <span class="cookie-value vulnerable">12345</span>
+                                <span class="vulnerability-note">⚠️ Predictable user ID</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cookie-example">
+                        <h3>Encoded Cookie Examples</h3>
+                        <div class="cookie-display">
+                            <div class="cookie-item">
+                                <span class="cookie-name">preferences</span>=
+                                <span class="cookie-value encoded">eyJ0aGVtZSI6ImRhcmsiLCJsYW5nIjoidXMifQ==</span>
+                                <button class="decode-btn" data-encoded="eyJ0aGVtZSI6ImRhcmsiLCJsYW5nIjoidXMifQ==">Decode Base64</button>
+                            </div>
+                            <div class="cookie-item">
+                                <span class="cookie-name">session</span>=
+                                <span class="cookie-value encoded">dXNlcklkPTEyMzQ1O3JvbGU9dXNlcjthdXRoPXRydWU=</span>
+                                <button class="decode-btn" data-encoded="dXNlcklkPTEyMzQ1O3JvbGU9dXNlcjthdXRoPXRydWU=">Decode Base64</button>
+                            </div>
+                        </div>
+                        <div id="decodedOutput" style="display: none;">
+                            <h4>Decoded Content:</h4>
+                            <pre id="decodedText"></pre>
+                            <p class="text-warning">⚠️ Base64 is encoding, not encryption! Values are easily readable.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>🧪 Interactive Cookie Poisoning Simulation</h2>
+                <p>Experience different cookie manipulation techniques in safe, controlled demonstrations:</p>
+
+                <!-- Demo Scenarios -->
+                <div class="demo-scenarios">
+                    <div class="scenario-tabs">
+                        <button class="scenario-btn active" data-scenario="privilege">👑 Privilege Escalation</button>
+                        <button class="scenario-btn" data-scenario="price">💰 Price Manipulation</button>
+                        <button class="scenario-btn" data-scenario="fixation">🔒 Session Fixation</button>
+                        <button class="scenario-btn" data-scenario="userid">👥 User ID Manipulation</button>
+                    </div>
+
+                    <!-- Privilege Escalation Demo -->
+                    <div class="scenario-content active" id="privilege-scenario">
+                        <h3>Privilege Escalation Attack</h3>
+                        <div class="attack-simulation">
+                            <div class="step-container">
+                                <div class="step">
+                                    <h4>Step 1: Normal User Login</h4>
+                                    <div class="user-interface">
+                                        <div class="login-status">
+                                            <p><strong>Logged in as:</strong> Regular User</p>
+                                            <p><strong>Permissions:</strong> Read posts, Comment</p>
+                                        </div>
+                                        <div class="current-cookies">
+                                            <h5>Current Cookies:</h5>
+                                            <div class="cookie-list">
+                                                <span class="cookie-item">userId=5678</span>
+                                                <span class="cookie-item">userRole=user</span>
+                                                <span class="cookie-item">isAdmin=false</span>
+                                            </div>
+                                        </div>
+                                        <button id="startPrivilegeAttack" class="btn btn-danger">Attempt Admin Access</button>
+                                    </div>
+                                </div>
+
+                                <div class="step" id="privilegeStep2" style="display: none;">
+                                    <h4>Step 2: Cookie Manipulation</h4>
+                                    <div class="cookie-editor">
+                                        <h5>Browser Developer Tools - Cookie Editor:</h5>
+                                        <div class="devtools-simulation">
+                                            <div class="cookie-edit-row">
+                                                <span>userRole:</span>
+                                                <input type="text" id="roleInput" value="user" class="cookie-input">
+                                                <button id="changeRole" class="btn btn-sm btn-secondary">Change to "admin"</button>
+                                            </div>
+                                            <div class="cookie-edit-row">
+                                                <span>isAdmin:</span>
+                                                <input type="text" id="adminInput" value="false" class="cookie-input">
+                                                <button id="changeAdmin" class="btn btn-sm btn-secondary">Change to "true"</button>
+                                            </div>
+                                        </div>
+                                        <button id="applyChanges" class="btn btn-primary" style="display: none;">Apply Changes</button>
+                                    </div>
+                                </div>
+
+                                <div class="step" id="privilegeStep3" style="display: none;">
+                                    <h4>Step 3: Unauthorized Admin Access</h4>
+                                    <div class="admin-panel">
+                                        <div class="alert alert-danger">
+                                            <h5>🚨 Attack Successful!</h5>
+                                            <p>User now has admin privileges due to weak cookie validation</p>
+                                        </div>
+                                        <div class="admin-interface">
+                                            <h5>Admin Panel Access Gained:</h5>
+                                            <div class="admin-actions">
+                                                <button class="btn btn-danger btn-sm">Delete Users</button>
+                                                <button class="btn btn-danger btn-sm">Modify Database</button>
+                                                <button class="btn btn-danger btn-sm">Access Financial Data</button>
+                                                <button class="btn btn-danger btn-sm">System Settings</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Price Manipulation Demo -->
+                    <div class="scenario-content" id="price-scenario">
+                        <h3>E-commerce Price Manipulation</h3>
+                        <div class="shopping-simulation">
+                            <div class="shopping-cart">
+                                <h4>Shopping Cart</h4>
+                                <div class="cart-items">
+                                    <div class="cart-item">
+                                        <span>Laptop</span>
+                                        <span>$999.99</span>
+                                    </div>
+                                    <div class="cart-item">
+                                        <span>Mouse</span>
+                                        <span>$25.99</span>
+                                    </div>
+                                    <div class="cart-total">
+                                        <strong>Total: $<span id="cartTotal">1025.98</span></strong>
+                                    </div>
+                                </div>
+                                
+                                <div class="cart-cookies">
+                                    <h5>Cart Cookie:</h5>
+                                    <code>cartTotal=<span id="cartCookieValue">1025.98</span></code>
+                                </div>
+                                
+                                <button id="manipulatePrice" class="btn btn-danger">Manipulate Price Cookie</button>
+                            </div>
+
+                            <div id="priceManipulation" style="display: none;">
+                                <div class="price-editor">
+                                    <h4>Cookie Manipulation</h4>
+                                    <p>Attacker modifies the cart total cookie:</p>
+                                    <div class="cookie-modification">
+                                        <label>New cart total:</label>
+                                        <input type="number" id="newPrice" value="10.00" step="0.01">
+                                        <button id="applyPriceChange" class="btn btn-primary">Apply Change</button>
+                                    </div>
+                                </div>
+
+                                <div id="priceResult" style="display: none;">
+                                    <div class="alert alert-danger">
+                                        <h4>🛒 Price Manipulation Successful!</h4>
+                                        <p>Cart total changed from $1025.98 to $<span id="finalPrice"></span></p>
+                                        <p>Potential loss to merchant: $<span id="loss"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Session Fixation Demo -->
+                    <div class="scenario-content" id="fixation-scenario">
+                        <h3>Session Fixation Attack</h3>
+                        <div class="fixation-simulation">
+                            <div class="attack-flow">
+                                <div class="flow-step">
+                                    <h4>Step 1: Attacker Sets Malicious Session</h4>
+                                    <div class="attacker-action">
+                                        <p>Attacker creates a session and gets session ID:</p>
+                                        <code>SESSIONID=EVIL123ATTACK456</code>
+                                        <button id="setMaliciousSession" class="btn btn-danger">Set Malicious Session</button>
+                                    </div>
+                                </div>
+
+                                <div class="flow-step" id="fixationStep2" style="display: none;">
+                                    <h4>Step 2: Victim Uses Fixed Session</h4>
+                                    <div class="victim-perspective">
+                                        <p>Victim logs in with the pre-set session cookie:</p>
+                                        <div class="login-form">
+                                            <input type="text" placeholder="username@example.com" readonly>
+                                            <input type="password" placeholder="••••••••" readonly>
+                                            <button id="victimLogin" class="btn btn-primary">Login</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flow-step" id="fixationStep3" style="display: none;">
+                                    <h4>Step 3: Attacker Uses Known Session</h4>
+                                    <div class="attack-result">
+                                        <div class="alert alert-danger">
+                                            <h4>🎯 Session Fixation Successful!</h4>
+                                            <p>Attacker knows the session ID and can now impersonate the victim</p>
+                                            <code>Using known session: EVIL123ATTACK456</code>
+                                        </div>
+                                        <div class="victim-account">
+                                            <h5>Victim's Account (Accessed by Attacker)</h5>
+                                            <p>Email: user@example.com</p>
+                                            <p>Balance: $2,430.15</p>
+                                            <button class="btn btn-danger btn-sm">Transfer Money</button>
+                                            <button class="btn btn-danger btn-sm">Change Password</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User ID Manipulation Demo -->
+                    <div class="scenario-content" id="userid-scenario">
+                        <h3>User ID Enumeration Attack</h3>
+                        <div class="userid-simulation">
+                            <div class="current-user">
+                                <h4>Current User Profile</h4>
+                                <div class="user-profile">
+                                    <p><strong>User ID:</strong> <span id="currentUserId">12345</span></p>
+                                    <p><strong>Name:</strong> John Doe</p>
+                                    <p><strong>Email:</strong> john@example.com</p>
+                                    <p><strong>Profile Type:</strong> Basic User</p>
+                                </div>
+                                <div class="user-cookie">
+                                    <strong>Cookie:</strong> <code>userId=<span id="userIdCookie">12345</span></code>
+                                </div>
+                            </div>
+
+                            <div class="userid-manipulation">
+                                <h4>User ID Manipulation</h4>
+                                <p>Try different user IDs to access other accounts:</p>
+                                <div class="userid-input">
+                                    <input type="number" id="targetUserId" placeholder="Enter User ID" value="12346">
+                                    <button id="changeUserId" class="btn btn-danger">Access User Account</button>
+                                </div>
+                            </div>
+
+                            <div id="useridResult" style="display: none;">
+                                <div class="accessed-profile">
+                                    <h4>Accessed Profile</h4>
+                                    <div id="profileData"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Defense Strategies -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>🛡️ How to Prevent Cookie Poisoning</h2>
+                
+                <div class="grid grid-2 mt-lg">
+                    <div>
+                        <h3>For Website Developers:</h3>
+                        <ul class="defense-list">
+                            <li>
+                                <strong>Server-side validation</strong>
+                                <p>Never trust client-side cookie values</p>
+                                <code>// Validate all cookie data on server
+if (!isValidUserRole($cookieRole)) {
+    throw new SecurityException();
+}</code>
+                            </li>
+                            <li>
+                                <strong>Cryptographic signatures</strong>
+                                <p>Sign cookie values to detect tampering</p>
+                                <code>Set-Cookie: data=value.signature; HttpOnly</code>
+                            </li>
+                            <li>
+                                <strong>Encrypt sensitive data</strong>
+                                <p>Encrypt cookie content, don't just encode</p>
+                                <code>$encryptedData = encrypt($userData, $secretKey);</code>
+                            </li>
+                            <li>
+                                <strong>Session-based storage</strong>
+                                <p>Store sensitive data on server, not in cookies</p>
+                                <code>$_SESSION['userRole'] = 'admin'; // Server-side</code>
+                            </li>
+                            <li>
+                                <strong>Implement session regeneration</strong>
+                                <p>Generate new session IDs after authentication</p>
+                                <code>session_regenerate_id(true);</code>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3>For Users:</h3>
+                        <ul class="defense-list">
+                            <li>
+                                <strong>Don't modify cookies manually</strong>
+                                <p>Avoid using browser developer tools to change values</p>
+                            </li>
+                            <li>
+                                <strong>Log out properly</strong>
+                                <p>Always use the website's logout function</p>
+                            </li>
+                            <li>
+                                <strong>Use private browsing</strong>
+                                <p>For sensitive activities to limit cookie persistence</p>
+                            </li>
+                            <li>
+                                <strong>Monitor account activity</strong>
+                                <p>Check for unauthorized changes or purchases</p>
+                            </li>
+                            <li>
+                                <strong>Report suspicious behavior</strong>
+                                <p>Alert websites if you notice unusual pricing or access</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Code Examples -->
+                <div class="code-examples mt-xl">
+                    <h3>🔧 Secure Implementation Examples</h3>
+                    
+                    <div class="code-example">
+                        <h4>Vulnerable Code (DON'T DO THIS):</h4>
+                        <pre class="code-block vulnerable"><code>// Trusting client-side cookie values
+$userRole = $_COOKIE['userRole'];
+if ($userRole === 'admin') {
+    showAdminPanel();
+}
+
+// Storing prices in cookies
+$total = $_COOKIE['cartTotal'];
+processPayment($total);</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h4>Secure Code (DO THIS):</h4>
+                        <pre class="code-block secure"><code>// Server-side role validation
+$userId = $_COOKIE['userId'];
+$userRole = getUserRoleFromDatabase($userId);
+if ($userRole === 'admin' && isValidSession()) {
+    showAdminPanel();
+}
+
+// Server-side price calculation
+$cartItems = getCartFromDatabase($_SESSION['cartId']);
+$total = calculateTotal($cartItems);
+processPayment($total);</code></pre>
+                    </div>
+                </div>
+
+                <!-- Test Your Knowledge -->
+                <div class="quiz-section mt-xl">
+                    <h3>🧠 Test Your Knowledge</h3>
+                    <div class="quiz-question">
+                        <p><strong>What is the most effective way to prevent cookie poisoning attacks?</strong></p>
+                        <div class="quiz-options">
+                            <label><input type="radio" name="q1" value="encoding"> Base64 encode all cookie values</label>
+                            <label><input type="radio" name="q1" value="serverside"> Validate all cookie data on the server</label>
+                            <label><input type="radio" name="q1" value="httponly"> Use HttpOnly cookie flag</label>
+                        </div>
+                        <button class="btn btn-primary mt-sm" onclick="checkAnswer()">Check Answer</button>
+                        <div id="quizResult" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-World Examples -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>📰 Real-World Cookie Poisoning Cases</h2>
+                
+                <div class="case-studies">
+                    <div class="case-study">
+                        <h3>Case 1: E-commerce Price Manipulation (2018)</h3>
+                        <p><strong>Target:</strong> Major online retailer</p>
+                        <p><strong>Method:</strong> Modified cart total cookies before checkout</p>
+                        <p><strong>Impact:</strong> $50,000+ in fraudulent purchases at reduced prices</p>
+                        <p><strong>Lesson:</strong> Never trust client-side price calculations</p>
+                    </div>
+                    
+                    <div class="case-study">
+                        <h3>Case 2: Banking Privilege Escalation (2019)</h3>
+                        <p><strong>Target:</strong> Regional bank's online platform</p>
+                        <p><strong>Method:</strong> Modified userType cookie from 'customer' to 'employee'</p>
+                        <p><strong>Impact:</strong> Unauthorized access to internal banking tools</p>
+                        <p><strong>Lesson:</strong> Implement proper server-side authorization checks</p>
+                    </div>
+                    
+                    <div class="case-study">
+                        <h3>Case 3: Social Media Account Takeover (2020)</h3>
+                        <p><strong>Target:</strong> Popular social networking site</p>
+                        <p><strong>Method:</strong> Session fixation combined with user ID manipulation</p>
+                        <p><strong>Impact:</strong> 10,000+ accounts compromised through automated attacks</p>
+                        <p><strong>Lesson:</strong> Regenerate session IDs and validate user ownership</p>
+                    </div>
+                    
+                    <div class="case-study">
+                        <h3>Case 4: Healthcare Data Breach (2021)</h3>
+                        <p><strong>Target:</strong> Medical records management system</p>
+                        <p><strong>Method:</strong> Patient ID manipulation in cookies</p>
+                        <p><strong>Impact:</strong> Unauthorized access to sensitive medical records</p>
+                        <p><strong>Lesson:</strong> Encrypt and sign all sensitive identifiers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <section class="section">
+        <div class="container">
+            <div class="navigation-cards">
+                <a href="tracking-demo.html" class="nav-card">
+                    <h3>Next: Cookie Tracking →</h3>
+                    <p>Learn about cookie-based tracking and profiling</p>
+                </a>
+                <a href="mitm-demo.html" class="nav-card">
+                    <h3>← Previous: MITM Attacks</h3>
+                    <p>Return to man-in-the-middle attacks</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script src="app.js"></script>
+    <script>
+        // Cookie decoding functionality
+        document.querySelectorAll('.decode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const encoded = btn.dataset.encoded;
+                try {
+                    const decoded = atob(encoded);
+                    document.getElementById('decodedText').textContent = decoded;
+                    document.getElementById('decodedOutput').style.display = 'block';
+                } catch (e) {
+                    document.getElementById('decodedText').textContent = 'Invalid Base64 encoding';
+                    document.getElementById('decodedOutput').style.display = 'block';
+                }
+            });
+        });
+
+        // Scenario switching
+        document.querySelectorAll('.scenario-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all
+                document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.scenario-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active to clicked
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.scenario + '-scenario').classList.add('active');
+            });
+        });
+
+        // Privilege escalation demo
+        document.getElementById('startPrivilegeAttack').addEventListener('click', () => {
+            document.getElementById('privilegeStep2').style.display = 'block';
+        });
+
+        document.getElementById('changeRole').addEventListener('click', () => {
+            document.getElementById('roleInput').value = 'admin';
+            document.getElementById('roleInput').style.background = '#fef2f2';
+            checkPrivilegeChanges();
+        });
+
+        document.getElementById('changeAdmin').addEventListener('click', () => {
+            document.getElementById('adminInput').value = 'true';
+            document.getElementById('adminInput').style.background = '#fef2f2';
+            checkPrivilegeChanges();
+        });
+
+        function checkPrivilegeChanges() {
+            if (document.getElementById('roleInput').value === 'admin' && 
+                document.getElementById('adminInput').value === 'true') {
+                document.getElementById('applyChanges').style.display = 'block';
+            }
+        }
+
+        document.getElementById('applyChanges').addEventListener('click', () => {
+            document.getElementById('privilegeStep3').style.display = 'block';
+        });
+
+        // Price manipulation demo
+        document.getElementById('manipulatePrice').addEventListener('click', () => {
+            document.getElementById('priceManipulation').style.display = 'block';
+        });
+
+        document.getElementById('applyPriceChange').addEventListener('click', () => {
+            const newPrice = parseFloat(document.getElementById('newPrice').value);
+            const originalPrice = 1025.98;
+            
+            document.getElementById('cartTotal').textContent = newPrice.toFixed(2);
+            document.getElementById('cartCookieValue').textContent = newPrice.toFixed(2);
+            document.getElementById('finalPrice').textContent = newPrice.toFixed(2);
+            document.getElementById('loss').textContent = (originalPrice - newPrice).toFixed(2);
+            
+            document.getElementById('priceResult').style.display = 'block';
+        });
+
+        // Session fixation demo
+        document.getElementById('setMaliciousSession').addEventListener('click', () => {
+            document.getElementById('fixationStep2').style.display = 'block';
+        });
+
+        document.getElementById('victimLogin').addEventListener('click', () => {
+            document.getElementById('fixationStep3').style.display = 'block';
+        });
+
+        // User ID manipulation demo
+        document.getElementById('changeUserId').addEventListener('click', () => {
+            const targetId = document.getElementById('targetUserId').value;
+            const profiles = {
+                '12346': {
+                    name: 'Jane Smith',
+                    email: 'jane@example.com',
+                    type: 'Premium User',
+                    balance: '$1,234.56'
+                },
+                '12347': {
+                    name: 'Bob Johnson',
+                    email: 'bob@company.com',
+                    type: 'Admin',
+                    balance: '$50,000.00'
+                },
+                '12348': {
+                    name: 'Alice Brown',
+                    email: 'alice@example.com',
+                    type: 'VIP Customer',
+                    balance: '$10,567.89'
+                }
+            };
+
+            const profile = profiles[targetId];
+            if (profile) {
+                document.getElementById('currentUserId').textContent = targetId;
+                document.getElementById('userIdCookie').textContent = targetId;
+                
+                document.getElementById('profileData').innerHTML = `
+                    <div class="alert alert-danger">
+                        <h5>🚨 Unauthorized Access Gained!</h5>
+                        <p><strong>Name:</strong> ${profile.name}</p>
+                        <p><strong>Email:</strong> ${profile.email}</p>
+                        <p><strong>Type:</strong> ${profile.type}</p>
+                        <p><strong>Balance:</strong> ${profile.balance}</p>
+                    </div>
+                `;
+                
+                document.getElementById('useridResult').style.display = 'block';
+            } else {
+                document.getElementById('profileData').innerHTML = `
+                    <div class="alert alert-warning">
+                        <p>User ID ${targetId} not found or access denied.</p>
+                    </div>
+                `;
+                document.getElementById('useridResult').style.display = 'block';
+            }
+        });
+
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="q1"]:checked');
+            const result = document.getElementById('quizResult');
+            
+            if (!selected) {
+                result.innerHTML = '<p class="text-warning">Please select an answer!</p>';
+                result.style.display = 'block';
+                return;
+            }
+            
+            if (selected.value === 'serverside') {
+                result.innerHTML = '<p class="text-success">✅ Correct! Server-side validation is the most effective defense against cookie poisoning.</p>';
+            } else {
+                result.innerHTML = '<p class="text-danger">❌ Incorrect. While other measures help, server-side validation is the primary defense.</p>';
+            }
+            
+            result.style.display = 'block';
+        }
+    </script>
+
+    <style>
+        /* Cookie Poisoning specific styles */
+        .cookie-examples {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .cookie-example {
+            padding: 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            background: var(--bg-secondary);
+        }
+
+        .cookie-display {
+            margin-top: 1rem;
+        }
+
+        .cookie-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+        }
+
+        .cookie-name {
+            color: var(--accent-info);
+            font-weight: 600;
+        }
+
+        .cookie-value.vulnerable {
+            color: var(--accent-primary);
+            background: #fef2f2;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin: 0 8px;
+        }
+
+        .cookie-value.encoded {
+            color: var(--text-muted);
+            word-break: break-all;
+            margin: 0 8px;
+        }
+
+        .vulnerability-note {
+            margin-left: auto;
+            color: var(--accent-primary);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .decode-btn {
+            margin-left: auto;
+            background: var(--accent-info);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .scenario-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 2rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .scenario-btn {
+            background: none;
+            border: none;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition-fast);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .scenario-btn.active {
+            border-bottom-color: var(--accent-primary);
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .scenario-content {
+            display: none;
+        }
+
+        .scenario-content.active {
+            display: block;
+        }
+
+        .step-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .step {
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            background: var(--bg-secondary);
+        }
+
+        .user-interface, .cookie-editor, .admin-panel {
+            margin-top: 1rem;
+        }
+
+        .login-status {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .current-cookies {
+            margin-top: 1rem;
+        }
+
+        .cookie-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .cookie-list .cookie-item {
+            background: var(--bg-tertiary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin: 0;
+        }
+
+        .devtools-simulation {
+            background: #1a1a1a;
+            color: #ffffff;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-family: var(--font-mono);
+            margin: 1rem 0;
+        }
+
+        .cookie-edit-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .cookie-input {
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: var(--font-mono);
+        }
+
+        .admin-interface {
+            margin-top: 1rem;
+        }
+
+        .admin-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .shopping-cart {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .cart-items {
+            margin: 1rem 0;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cart-total {
+            padding: 0.75rem 0;
+            font-size: 1.1rem;
+            border-top: 2px solid var(--border-color);
+            margin-top: 0.5rem;
+        }
+
+        .cart-cookies {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin: 1rem 0;
+        }
+
+        .price-editor {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin-top: 1rem;
+        }
+
+        .cookie-modification {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .cookie-modification input {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+        }
+
+        .attack-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .flow-step {
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            background: var(--bg-secondary);
+        }
+
+        .attacker-action, .victim-perspective {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+        }
+
+        .victim-account {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin-top: 1rem;
+        }
+
+        .userid-simulation {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .current-user, .userid-manipulation {
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            background: var(--bg-secondary);
+        }
+
+        .user-profile {
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin: 1rem 0;
+        }
+
+        .user-cookie {
+            font-family: var(--font-mono);
+            margin-top: 0.5rem;
+        }
+
+        .userid-input {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .userid-input input {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .code-examples {
+            margin-top: 2rem;
+        }
+
+        .code-example {
+            margin: 1.5rem 0;
+        }
+
+        .code-block {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            overflow-x: auto;
+            border-left: 4px solid var(--accent-info);
+        }
+
+        .code-block.vulnerable {
+            border-left-color: var(--accent-primary);
+            background: #fef2f2;
+        }
+
+        .code-block.secure {
+            border-left-color: var(--accent-success);
+            background: #f0fdf4;
+        }
+
+        @media (max-width: 768px) {
+            .scenario-tabs {
+                flex-direction: column;
+            }
+
+            .cookie-modification {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .userid-input {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .userid-input input {
+                max-width: none;
+            }
+        }
+    </style>
+</body>
+</html>

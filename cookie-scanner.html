@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive browser cookie analyzer tool. Scan and analyze your current browser cookies for security risks and privacy concerns.">
+    <meta name="keywords" content="cookie scanner, browser cookie analyzer, cookie security analysis, privacy audit tool">
+    <meta name="author" content="Cookies Exposed">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Cookie Scanner - Analyze Your Browser Cookies">
+    <meta property="og:description" content="Interactive tool to scan and analyze browser cookies for security risks and privacy concerns.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cookies-exposed.com/cookie-scanner.html">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Cookie Scanner - Browser Cookie Analysis Tool">
+    <meta name="twitter:description" content="Scan your browser cookies for security and privacy risks.">
+    
+    <title>Cookie Scanner - Analyze Your Browser Cookies | Cookies Exposed</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="container">
+                <div class="nav-content">
+                    <a href="/" class="logo">
+                        <div class="logo-icon">🍪</div>
+                        Cookies Exposed
+                    </a>
+                    
+                    <ul class="nav-menu">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="cookie-scanner.html" class="active">Cookie Scanner</a></li>
+                        <li class="nav-dropdown">
+                            <a href="#" class="dropdown-toggle">Attack Demos ▼</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="session-hijacking.html">Session Hijacking</a></li>
+                                <li><a href="xss-demo.html">XSS Cookie Theft</a></li>
+                                <li><a href="csrf-demo.html">CSRF Attacks</a></li>
+                                <li><a href="mitm-demo.html">Man-in-the-Middle</a></li>
+                                <li><a href="cookie-poisoning.html">Cookie Poisoning</a></li>
+                                <li><a href="tracking-demo.html">Tracking & Profiling</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="privacy.html">Privacy</a></li>
+                    </ul>
+                    
+                    <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Scanner Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title">Cookie Scanner</h1>
+                <p class="section-subtitle">Analyze the cookies currently stored in your browser to understand their security and privacy implications.</p>
+            </div>
+
+            <!-- Domain Limitation Warning -->
+            <div class="alert" style="background: linear-gradient(135deg, #fff3cd, #ffeaa7); border-left: 4px solid #e17055; margin: 1.5rem 0; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h3 style="margin-top: 0; color: #d63031; display: flex; align-items: center; gap: 0.5rem;">
+                    ⚠️ Why Don't I See My Gmail/Facebook Cookies?
+                </h3>
+                <p style="margin-bottom: 1rem; font-size: 1.1rem;"><strong>This scanner can only detect cookies from the current domain</strong> due to browser security policies.</p>
+                
+                <details style="margin-top: 1rem;">
+                    <summary style="cursor: pointer; font-weight: bold; color: #2d3436; padding: 0.5rem; background: rgba(255,255,255,0.7); border-radius: 4px; margin-bottom: 1rem;">
+                        🔒 Click here to understand why (Security Explanation)
+                    </summary>
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.8); border-radius: 6px; border-left: 3px solid #00b894;">
+                        <h4 style="color: #00b894; margin-top: 0;">Browser Security: Same-Origin Policy</h4>
+                        <div style="display: grid; gap: 1rem; margin: 1rem 0;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: #00b894; font-size: 1.2rem;">✅</span>
+                                <strong>gmail.com cookies</strong> → Only visible when you're on Google domains
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: #00b894; font-size: 1.2rem;">✅</span>
+                                <strong>facebook.com cookies</strong> → Only visible when you're on Facebook
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: #00b894; font-size: 1.2rem;">✅</span>
+                                <strong>This scanner's cookies</strong> → Only visible on this domain
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: #e17055; font-size: 1.2rem;">❌</span>
+                                <strong>Cross-domain access</strong> → Blocked to protect your privacy!
+                            </div>
+                        </div>
+                        <div style="background: #e8f4fd; padding: 1rem; border-radius: 6px; margin-top: 1rem;">
+                            <h4 style="color: #0984e3; margin-top: 0;">💡 How to See All Your Cookies:</h4>
+                            <ol style="margin-bottom: 0; color: #2d3436;">
+                                <li><strong>Browser DevTools:</strong> Press F12 → Application/Storage → Cookies</li>
+                                <li><strong>Try Demo Mode:</strong> Use the button below to see example cookie analysis</li>
+                                <li><strong>Browser Extension:</strong> Extensions have special permissions to access all cookies</li>
+                            </ol>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Privacy Notice -->
+            <div class="alert alert-info">
+                <strong>🔒 Privacy First:</strong> All cookie analysis happens locally in your browser. No data is sent to any server or third party. Your privacy is protected.
+            </div>
+
+            <!-- Scanner Controls -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <div class="card-icon">🔍</div>
+                        Analysis Controls
+                    </h2>
+                </div>
+                
+                <div class="flex flex-between" style="margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                    <div class="flex" style="gap: 1rem; flex-wrap: wrap;">
+                        <button id="scanBtn" class="btn btn-primary">
+                            <span id="scanIcon">🔍</span>
+                            <span id="scanText">Start Analysis</span>
+                        </button>
+                        <button id="demoBtn" class="btn btn-accent">
+                            🧪 Demo Mode (Test Cookies)
+                        </button>
+                        <button id="clearBtn" class="btn btn-secondary" disabled>Clear Results</button>
+                        <button id="refreshBtn" class="btn btn-secondary" disabled>Refresh Data</button>
+                    </div>
+                    
+                    <div class="flex" style="gap: 1rem; flex-wrap: wrap;">
+                        <button id="exportJsonBtn" class="btn btn-secondary" disabled>Export JSON</button>
+                        <button id="exportReportBtn" class="btn btn-secondary" disabled>Export Report</button>
+                    </div>
+                </div>
+
+                <!-- Filter Controls -->
+                <div id="filterControls" class="flex" style="gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; display: none;">
+                    <select id="riskFilter" class="border border-radius p-sm">
+                        <option value="all">All Risk Levels</option>
+                        <option value="critical">Critical Risk</option>
+                        <option value="high">High Risk</option>
+                        <option value="medium">Medium Risk</option>
+                        <option value="low">Low Risk</option>
+                    </select>
+                    
+                    <select id="typeFilter" class="border border-radius p-sm">
+                        <option value="all">All Cookie Types</option>
+                        <option value="session">Session Cookies</option>
+                        <option value="persistent">Persistent Cookies</option>
+                        <option value="thirdparty">Third-Party Cookies</option>
+                    </select>
+                    
+                    <input type="search" id="searchFilter" placeholder="Search by name or domain..." class="border border-radius p-sm" style="min-width: 200px;">
+                </div>
+            </div>
+
+            <!-- Summary Statistics -->
+            <div id="summarySection" style="display: none;">
+                <div class="grid grid-2" style="margin-bottom: 2rem;">
+                    <div class="card">
+                        <h3>Cookie Summary</h3>
+                        <div class="grid grid-2" style="gap: 1rem;">
+                            <div class="text-center">
+                                <div style="font-size: 2rem; font-weight: bold; color: var(--accent-primary);" id="totalCookies">0</div>
+                                <div class="text-muted">Total Cookies</div>
+                            </div>
+                            <div class="text-center">
+                                <div style="font-size: 2rem; font-weight: bold; color: var(--accent-secondary);" id="thirdPartyCookies">0</div>
+                                <div class="text-muted">Third-Party</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Risk Assessment</h3>
+                        <div class="grid grid-2" style="gap: 1rem;">
+                            <div>
+                                <div class="flex flex-between">
+                                    <span class="risk-badge risk-critical">Critical</span>
+                                    <span id="criticalCount">0</span>
+                                </div>
+                                <div class="flex flex-between mt-sm">
+                                    <span class="risk-badge risk-high">High</span>
+                                    <span id="highCount">0</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex flex-between">
+                                    <span class="risk-badge risk-medium">Medium</span>
+                                    <span id="mediumCount">0</span>
+                                </div>
+                                <div class="flex flex-between mt-sm">
+                                    <span class="risk-badge risk-low">Low</span>
+                                    <span id="lowCount">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <div class="card-icon">📊</div>
+                            Cookie Analysis Results
+                        </h2>
+                    </div>
+                    
+                    <!-- No Results Message -->
+                    <div id="noResultsMessage" style="display: none;">
+                        <div class="text-center p-xl">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🍪</div>
+                            <h3>No Cookies Found</h3>
+                            <p class="text-muted">This site doesn't have any cookies set, or they may have been blocked by your browser settings.</p>
+                            
+                            <div class="card mt-lg" style="max-width: 600px; margin: 1.5rem auto; text-align: left;">
+                                <h4>Why might this happen?</h4>
+                                <ul class="text-muted" style="margin: 1rem 0;">
+                                    <li><strong>Local file access:</strong> Opening HTML files directly (file://) blocks cookie access for security</li>
+                                    <li><strong>New website:</strong> This educational site doesn't set cookies - it only reads existing ones</li>
+                                    <li><strong>Browser settings:</strong> Cookies might be disabled or in private browsing mode</li>
+                                    <li><strong>Fresh browser:</strong> No other websites have set cookies yet</li>
+                                </ul>
+                                
+                                <div class="text-center mt-lg">
+                                    <button id="tryDemoBtn" class="btn btn-accent">
+                                        🧪 Try Demo Mode Instead
+                                    </button>
+                                    <p class="text-muted mt-sm" style="font-size: 0.9rem;">
+                                        Demo mode shows example cookies to demonstrate the analysis features
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Table -->
+                    <div id="resultsTable" style="display: none;">
+                        <div style="overflow-x: auto;">
+                            <table class="cookie-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Value</th>
+                                        <th>Domain</th>
+                                        <th>Expires</th>
+                                        <th>Security</th>
+                                        <th>Risk Level</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cookieTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Analysis Section -->
+            <div id="detailsSection" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <div class="card-icon">🔬</div>
+                            Detailed Security Analysis
+                        </h2>
+                    </div>
+                    <div id="detailsContent"></div>
+                </div>
+            </div>
+
+            <!-- Recommendations Section -->
+            <div id="recommendationsSection" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <div class="card-icon">💡</div>
+                            Security Recommendations
+                        </h2>
+                    </div>
+                    <div id="recommendationsContent"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cookie Detail Modal -->
+    <div id="cookieModal" class="modal" style="display: none;">
+        <div class="modal-overlay" onclick="closeCookieModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalCookieName">Cookie Details</h3>
+                <button onclick="closeCookieModal()" class="btn btn-small">×</button>
+            </div>
+            <div class="modal-body" id="modalCookieContent">
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="/">Home</a>
+                    <a href="cookie-scanner.html">Cookie Scanner</a>
+                    <a href="about.html">About</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
+                <p>&copy; 2024 Cookies Exposed. This is an educational tool designed to raise awareness about browser cookie security and privacy. All analysis is performed locally in your browser.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Additional Styles for Modal -->
+    <style>
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-heavy);
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+            width: 600px;
+        }
+
+        .modal-header {
+            padding: var(--space-lg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: var(--space-lg);
+        }
+
+        .security-flag {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: var(--space-xs);
+            margin-bottom: var(--space-xs);
+        }
+
+        .flag-secure {
+            background-color: rgba(5, 150, 105, 0.1);
+            color: var(--accent-success);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .flag-httponly {
+            background-color: rgba(2, 132, 199, 0.1);
+            color: var(--accent-info);
+            border: 1px solid rgba(2, 132, 199, 0.2);
+        }
+
+        .flag-samesite {
+            background-color: rgba(139, 69, 19, 0.1);
+            color: #8b4513;
+            border: 1px solid rgba(139, 69, 19, 0.2);
+        }
+
+        .flag-missing {
+            background-color: rgba(220, 38, 38, 0.1);
+            color: var(--accent-primary);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            margin: var(--space-md) 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-success), var(--accent-secondary), var(--accent-primary));
+            border-radius: var(--radius-sm);
+            transition: width var(--transition-normal);
+            width: 0%;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95vw;
+                margin: var(--space-md);
+            }
+            
+            .cookie-table {
+                font-size: 0.75rem;
+            }
+            
+            .cookie-table th,
+            .cookie-table td {
+                padding: var(--space-xs);
+            }
+        }
+    </style>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script>
+        // Cookie Scanner Application
+        class CookieScanner {
+            constructor() {
+                this.cookies = [];
+                this.filteredCookies = [];
+                this.isScanning = false;
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.setupFilters();
+            }
+
+            bindEvents() {
+                document.getElementById('scanBtn').addEventListener('click', () => this.startScan());
+                document.getElementById('demoBtn').addEventListener('click', () => this.startDemo());
+                document.getElementById('clearBtn').addEventListener('click', () => this.clearResults());
+                document.getElementById('refreshBtn').addEventListener('click', () => this.refreshData());
+                document.getElementById('exportJsonBtn').addEventListener('click', () => this.exportJSON());
+                document.getElementById('exportReportBtn').addEventListener('click', () => this.exportReport());
+                
+                // Add event listener for demo button in no-results message (using event delegation)
+                document.addEventListener('click', (e) => {
+                    if (e.target.id === 'tryDemoBtn') {
+                        this.startDemo();
+                    }
+                });
+            }
+
+            setupFilters() {
+                const riskFilter = document.getElementById('riskFilter');
+                const typeFilter = document.getElementById('typeFilter');
+                const searchFilter = document.getElementById('searchFilter');
+
+                riskFilter.addEventListener('change', () => this.applyFilters());
+                typeFilter.addEventListener('change', () => this.applyFilters());
+                searchFilter.addEventListener('input', CookiesExposed.Utils.debounce(() => this.applyFilters(), 300));
+            }
+
+            async startScan() {
+                if (this.isScanning) return;
+
+                this.isScanning = true;
+                this.updateScanButton(true);
+
+                try {
+                    // Show progress
+                    this.showProgress();
+
+                    // Get cookie data
+                    const cookieData = await CookiesExposed.CookieManager.getEnhancedCookieInfo();
+                    this.cookies = cookieData.cookies || [];
+
+                    // Update progress
+                    this.updateProgress(50);
+
+                    // Analyze cookies
+                    this.analyzeCookies();
+
+                    // Update progress
+                    this.updateProgress(100);
+
+                    // Show results
+                    setTimeout(() => {
+                        this.displayResults();
+                        this.hideProgress();
+                        this.isScanning = false;
+                        this.updateScanButton(false);
+                    }, 500);
+
+                } catch (error) {
+                    console.error('Cookie scan failed:', error);
+                    CookiesExposed.Utils.showToast('Cookie scan failed. Please try again.', 'danger');
+                    this.isScanning = false;
+                    this.updateScanButton(false);
+                    this.hideProgress();
+                }
+            }
+
+            startDemo() {
+                // Create demo cookies for educational purposes
+                const demoCookies = [
+                    {
+                        name: 'session_id',
+                        value: 'abc123****', // Redacted for demo
+                        domain: 'example.com',
+                        path: '/',
+                        expires: 'Session',
+                        secure: false,
+                        httpOnly: false,
+                        sameSite: 'Lax'
+                    },
+                    {
+                        name: 'auth_token',
+                        value: 'jwt_eyJ0****', // Redacted for demo
+                        domain: 'secure-site.com',
+                        path: '/',
+                        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+                        secure: true,
+                        httpOnly: true,
+                        sameSite: 'Strict'
+                    },
+                    {
+                        name: 'tracking_id',
+                        value: 'track_xyz789****', // Redacted for demo
+                        domain: '.ads-network.com',
+                        path: '/',
+                        expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+                        secure: false,
+                        httpOnly: false,
+                        sameSite: 'None'
+                    },
+                    {
+                        name: 'preferences',
+                        value: '{"theme":"dark","lang":"en"}',
+                        domain: window.location.hostname,
+                        path: '/',
+                        expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+                        secure: window.location.protocol === 'https:',
+                        httpOnly: false,
+                        sameSite: 'Lax'
+                    },
+                    {
+                        name: 'analytics',
+                        value: 'GA1.2.****', // Redacted for demo
+                        domain: '.google-analytics.com',
+                        path: '/',
+                        expires: new Date(Date.now() + 730 * 24 * 60 * 60 * 1000).toISOString(),
+                        secure: true,
+                        httpOnly: false,
+                        sameSite: 'None'
+                    }
+                ];
+
+                // Set demo cookies and analyze
+                this.cookies = demoCookies;
+                this.analyzeCookies();
+                this.displayResults();
+                
+                // Try to set some real demo cookies if possible (will only work on HTTP/HTTPS)
+                this.setRealDemoCookies();
+                
+                // Show notification
+                CookiesExposed.Utils.showToast('Demo mode activated! Showing example cookies for educational purposes.', 'info');
+            }
+
+            setRealDemoCookies() {
+                // Only set cookies if we're on HTTP/HTTPS (not file://)
+                if (window.location.protocol !== 'file:') {
+                    try {
+                        // Set some real demo cookies for educational purposes
+                        document.cookie = "demo_session=abc123; path=/; SameSite=Lax";
+                        document.cookie = "demo_preferences={\"theme\":\"dark\"}; path=/; max-age=2592000; SameSite=Lax";
+                        document.cookie = "demo_analytics=demo_GA123; path=/; max-age=63072000; SameSite=None; Secure=" + (window.location.protocol === 'https:');
+                        console.log('Demo cookies set successfully');
+                    } catch (error) {
+                        console.log('Could not set demo cookies:', error.message);
+                    }
+                }
+            }
+
+            showProgress() {
+                const scanBtn = document.getElementById('scanBtn');
+                const progressHTML = `
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p class="text-center text-muted">Analyzing cookies...</p>
+                `;
+                
+                // Insert progress bar after scan button
+                const progressDiv = document.createElement('div');
+                progressDiv.id = 'progressContainer';
+                progressDiv.innerHTML = progressHTML;
+                scanBtn.parentNode.insertBefore(progressDiv, scanBtn.nextSibling);
+            }
+
+            updateProgress(percent) {
+                const progressFill = document.getElementById('progressFill');
+                if (progressFill) {
+                    progressFill.style.width = percent + '%';
+                }
+            }
+
+            hideProgress() {
+                const progressContainer = document.getElementById('progressContainer');
+                if (progressContainer) {
+                    progressContainer.remove();
+                }
+            }
+
+            updateScanButton(scanning) {
+                const scanBtn = document.getElementById('scanBtn');
+                const scanIcon = document.getElementById('scanIcon');
+                const scanText = document.getElementById('scanText');
+
+                if (scanning) {
+                    scanBtn.disabled = true;
+                    scanIcon.innerHTML = '<span class="loading-spinner"></span>';
+                    scanText.textContent = 'Analyzing...';
+                } else {
+                    scanBtn.disabled = false;
+                    scanIcon.textContent = '🔍';
+                    scanText.textContent = this.cookies.length > 0 ? 'Re-analyze' : 'Start Analysis';
+                }
+            }
+
+            analyzeCookies() {
+                this.cookies.forEach(cookie => {
+                    // Add risk assessment
+                    cookie.riskLevel = CookiesExposed.Utils.getCookieRiskLevel(cookie);
+                    cookie.riskExplanation = CookiesExposed.Utils.getRiskExplanation(cookie);
+                    
+                    // Determine cookie type
+                    cookie.type = this.determineCookieType(cookie);
+                    
+                    // Security flags analysis
+                    cookie.securityFlags = this.analyzeSecurityFlags(cookie);
+                });
+
+                this.filteredCookies = [...this.cookies];
+            }
+
+            determineCookieType(cookie) {
+                if (cookie.expires === 'Session') return 'session';
+                if (cookie.domain && cookie.domain !== window.location.hostname) return 'thirdparty';
+                return 'persistent';
+            }
+
+            analyzeSecurityFlags(cookie) {
+                return {
+                    secure: cookie.secure,
+                    httpOnly: cookie.httpOnly,
+                    sameSite: cookie.sameSite,
+                    hasExpiry: cookie.expires !== 'Session'
+                };
+            }
+
+            displayResults() {
+                if (this.cookies.length === 0) {
+                    this.showNoResults();
+                    return;
+                }
+
+                this.showResults();
+                this.updateSummary();
+                this.renderCookieTable();
+                this.generateDetailedAnalysis();
+                this.generateRecommendations();
+                this.enableControls();
+            }
+
+            showNoResults() {
+                document.getElementById('summarySection').style.display = 'none';
+                document.getElementById('resultsSection').style.display = 'block';
+                document.getElementById('noResultsMessage').style.display = 'block';
+                document.getElementById('resultsTable').style.display = 'none';
+                document.getElementById('detailsSection').style.display = 'none';
+                document.getElementById('recommendationsSection').style.display = 'none';
+            }
+
+            showResults() {
+                document.getElementById('summarySection').style.display = 'block';
+                document.getElementById('resultsSection').style.display = 'block';
+                document.getElementById('noResultsMessage').style.display = 'none';
+                document.getElementById('resultsTable').style.display = 'block';
+                document.getElementById('detailsSection').style.display = 'block';
+                document.getElementById('recommendationsSection').style.display = 'block';
+                document.getElementById('filterControls').style.display = 'flex';
+            }
+
+            updateSummary() {
+                const riskCounts = this.cookies.reduce((acc, cookie) => {
+                    acc[cookie.riskLevel] = (acc[cookie.riskLevel] || 0) + 1;
+                    return acc;
+                }, {});
+
+                const thirdPartyCount = this.cookies.filter(c => c.type === 'thirdparty').length;
+
+                document.getElementById('totalCookies').textContent = this.cookies.length;
+                document.getElementById('thirdPartyCookies').textContent = thirdPartyCount;
+                document.getElementById('criticalCount').textContent = riskCounts.critical || 0;
+                document.getElementById('highCount').textContent = riskCounts.high || 0;
+                document.getElementById('mediumCount').textContent = riskCounts.medium || 0;
+                document.getElementById('lowCount').textContent = riskCounts.low || 0;
+            }
+
+            renderCookieTable() {
+                const tbody = document.getElementById('cookieTableBody');
+                tbody.innerHTML = '';
+
+                this.filteredCookies.forEach((cookie, index) => {
+                    const row = this.createCookieRow(cookie, index);
+                    tbody.appendChild(row);
+                });
+            }
+
+            createCookieRow(cookie, index) {
+                const row = document.createElement('tr');
+                
+                const securityFlags = [];
+                if (cookie.secure) securityFlags.push('<span class="security-flag flag-secure">🔒 Secure</span>');
+                if (cookie.httpOnly) securityFlags.push('<span class="security-flag flag-httponly">🚫 HttpOnly</span>');
+                if (cookie.sameSite) securityFlags.push('<span class="security-flag flag-samesite">🛡️ SameSite</span>');
+                
+                if (securityFlags.length === 0) {
+                    securityFlags.push('<span class="security-flag flag-missing">⚠️ No Flags</span>');
+                }
+
+                row.innerHTML = `
+                    <td><strong>${CookiesExposed.Utils.sanitizeText(cookie.name)}</strong></td>
+                    <td><code class="cookie-value">${CookiesExposed.Utils.sanitizeText(CookiesExposed.Utils.redactCookieValue(cookie.value))}</code></td>
+                    <td>${CookiesExposed.Utils.sanitizeText(cookie.domain)}</td>
+                    <td>${CookiesExposed.Utils.formatDate(cookie.expires)}</td>
+                    <td>${securityFlags.join('')}</td>
+                    <td><span class="risk-badge risk-${cookie.riskLevel}">${cookie.riskLevel.toUpperCase()}</span></td>
+                    <td>
+                        <button class="btn btn-small btn-secondary" onclick="viewCookieDetails(${index})">Details</button>
+                    </td>
+                `;
+
+                return row;
+            }
+
+            generateDetailedAnalysis() {
+                const detailsContent = document.getElementById('detailsContent');
+                
+                const securityIssues = this.findSecurityIssues();
+                const privacyIssues = this.findPrivacyIssues();
+
+                let html = '<div class="grid grid-2">';
+
+                // Security Issues
+                html += '<div><h3>🔐 Security Issues</h3>';
+                if (securityIssues.length > 0) {
+                    html += '<ul>';
+                    securityIssues.forEach(issue => {
+                        html += `<li class="text-danger">${issue}</li>`;
+                    });
+                    html += '</ul>';
+                } else {
+                    html += '<p class="text-success">✅ No major security issues detected.</p>';
+                }
+                html += '</div>';
+
+                // Privacy Issues
+                html += '<div><h3>👁️ Privacy Issues</h3>';
+                if (privacyIssues.length > 0) {
+                    html += '<ul>';
+                    privacyIssues.forEach(issue => {
+                        html += `<li class="text-warning">${issue}</li>`;
+                    });
+                    html += '</ul>';
+                } else {
+                    html += '<p class="text-success">✅ No major privacy issues detected.</p>';
+                }
+                html += '</div>';
+
+                html += '</div>';
+
+                detailsContent.innerHTML = html;
+            }
+
+            findSecurityIssues() {
+                const issues = [];
+                
+                const insecureCookies = this.cookies.filter(c => !c.secure && window.location.protocol === 'https:');
+                if (insecureCookies.length > 0) {
+                    issues.push(`${insecureCookies.length} cookies without Secure flag on HTTPS site`);
+                }
+
+                const nonHttpOnlyCookies = this.cookies.filter(c => !c.httpOnly && (c.name.toLowerCase().includes('session') || c.name.toLowerCase().includes('auth')));
+                if (nonHttpOnlyCookies.length > 0) {
+                    issues.push(`${nonHttpOnlyCookies.length} authentication cookies accessible via JavaScript`);
+                }
+
+                const noSameSiteCookies = this.cookies.filter(c => !c.sameSite || c.sameSite === 'None');
+                if (noSameSiteCookies.length > 0) {
+                    issues.push(`${noSameSiteCookies.length} cookies vulnerable to CSRF attacks`);
+                }
+
+                return issues;
+            }
+
+            findPrivacyIssues() {
+                const issues = [];
+                
+                const thirdPartyCookies = this.cookies.filter(c => c.type === 'thirdparty');
+                if (thirdPartyCookies.length > 0) {
+                    issues.push(`${thirdPartyCookies.length} third-party cookies may enable tracking`);
+                }
+
+                const longLivedCookies = this.cookies.filter(c => {
+                    if (c.expires === 'Session') return false;
+                    const expiry = new Date(c.expires);
+                    const now = new Date();
+                    const daysDiff = (expiry - now) / (1000 * 60 * 60 * 24);
+                    return daysDiff > 365;
+                });
+                
+                if (longLivedCookies.length > 0) {
+                    issues.push(`${longLivedCookies.length} cookies persist for over a year`);
+                }
+
+                return issues;
+            }
+
+            generateRecommendations() {
+                const recommendationsContent = document.getElementById('recommendationsContent');
+                const recommendations = this.getPersonalizedRecommendations();
+
+                let html = '<div class="grid grid-2">';
+                
+                html += '<div><h3>🛡️ Security Recommendations</h3><ul>';
+                recommendations.security.forEach(rec => {
+                    html += `<li>${rec}</li>`;
+                });
+                html += '</ul></div>';
+
+                html += '<div><h3>🔒 Privacy Recommendations</h3><ul>';
+                recommendations.privacy.forEach(rec => {
+                    html += `<li>${rec}</li>`;
+                });
+                html += '</ul></div>';
+
+                html += '</div>';
+
+                recommendationsContent.innerHTML = html;
+            }
+
+            getPersonalizedRecommendations() {
+                const recommendations = {
+                    security: [],
+                    privacy: []
+                };
+
+                // Security recommendations
+                if (this.cookies.some(c => !c.secure && window.location.protocol === 'https:')) {
+                    recommendations.security.push('Ensure all sensitive cookies have the Secure flag');
+                }
+
+                if (this.cookies.some(c => !c.httpOnly)) {
+                    recommendations.security.push('Enable HttpOnly flag for authentication cookies');
+                }
+
+                if (this.cookies.some(c => !c.sameSite)) {
+                    recommendations.security.push('Configure SameSite attributes to prevent CSRF attacks');
+                }
+
+                recommendations.security.push('Regularly clear cookies and review permissions');
+                recommendations.security.push('Use browser security extensions for additional protection');
+
+                // Privacy recommendations
+                if (this.cookies.some(c => c.type === 'thirdparty')) {
+                    recommendations.privacy.push('Block third-party cookies in browser settings');
+                    recommendations.privacy.push('Use privacy-focused browser extensions');
+                }
+
+                recommendations.privacy.push('Review and manage cookie permissions regularly');
+                recommendations.privacy.push('Use incognito/private browsing for sensitive activities');
+                recommendations.privacy.push('Consider using a VPN for additional privacy protection');
+
+                return recommendations;
+            }
+
+            applyFilters() {
+                const riskFilter = document.getElementById('riskFilter').value;
+                const typeFilter = document.getElementById('typeFilter').value;
+                const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
+
+                this.filteredCookies = this.cookies.filter(cookie => {
+                    // Risk filter
+                    if (riskFilter !== 'all' && cookie.riskLevel !== riskFilter) {
+                        return false;
+                    }
+
+                    // Type filter
+                    if (typeFilter !== 'all' && cookie.type !== typeFilter) {
+                        return false;
+                    }
+
+                    // Search filter
+                    if (searchFilter && !cookie.name.toLowerCase().includes(searchFilter) && 
+                        !cookie.domain.toLowerCase().includes(searchFilter)) {
+                        return false;
+                    }
+
+                    return true;
+                });
+
+                this.renderCookieTable();
+            }
+
+            enableControls() {
+                document.getElementById('clearBtn').disabled = false;
+                document.getElementById('refreshBtn').disabled = false;
+                document.getElementById('exportJsonBtn').disabled = false;
+                document.getElementById('exportReportBtn').disabled = false;
+            }
+
+            clearResults() {
+                this.cookies = [];
+                this.filteredCookies = [];
+                
+                document.getElementById('summarySection').style.display = 'none';
+                document.getElementById('resultsSection').style.display = 'none';
+                document.getElementById('detailsSection').style.display = 'none';
+                document.getElementById('recommendationsSection').style.display = 'none';
+                document.getElementById('filterControls').style.display = 'none';
+                
+                document.getElementById('clearBtn').disabled = true;
+                document.getElementById('refreshBtn').disabled = true;
+                document.getElementById('exportJsonBtn').disabled = true;
+                document.getElementById('exportReportBtn').disabled = true;
+                
+                this.updateScanButton(false);
+                CookiesExposed.Utils.showToast('Results cleared', 'info');
+            }
+
+            refreshData() {
+                if (this.cookies.length > 0) {
+                    this.startScan();
+                }
+            }
+
+            exportJSON() {
+                const exportData = {
+                    timestamp: new Date().toISOString(),
+                    domain: window.location.hostname,
+                    totalCookies: this.cookies.length,
+                    cookies: this.cookies.map(cookie => ({
+                        ...cookie,
+                        value: CookiesExposed.Utils.redactCookieValue(cookie.value, 8) // Redact for export
+                    }))
+                };
+
+                CookiesExposed.Utils.downloadJSON(exportData, 'cookie-analysis.json');
+                CookiesExposed.Utils.showToast('JSON exported successfully', 'success');
+            }
+
+            exportReport() {
+                CookiesExposed.Utils.generatePDFReport(this.cookies);
+                CookiesExposed.Utils.showToast('Report exported successfully', 'success');
+            }
+        }
+
+        // Global functions for modal and cookie details
+        function viewCookieDetails(index) {
+            const scanner = window.cookieScanner;
+            const cookie = scanner.filteredCookies[index];
+            
+            document.getElementById('modalCookieName').textContent = `Cookie: ${cookie.name}`;
+            
+            const modalContent = document.getElementById('modalCookieContent');
+            modalContent.innerHTML = `
+                <div class="grid grid-2" style="gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <strong>Name:</strong><br>
+                        <code>${CookiesExposed.Utils.sanitizeText(cookie.name)}</code>
+                    </div>
+                    <div>
+                        <strong>Domain:</strong><br>
+                        <code>${CookiesExposed.Utils.sanitizeText(cookie.domain)}</code>
+                    </div>
+                    <div>
+                        <strong>Path:</strong><br>
+                        <code>${CookiesExposed.Utils.sanitizeText(cookie.path)}</code>
+                    </div>
+                    <div>
+                        <strong>Expires:</strong><br>
+                        <code>${CookiesExposed.Utils.formatDate(cookie.expires)}</code>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <strong>Value (Redacted):</strong><br>
+                    <code style="word-break: break-all;">${CookiesExposed.Utils.sanitizeText(CookiesExposed.Utils.redactCookieValue(cookie.value, 12))}</code>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <strong>Security Flags:</strong><br>
+                    ${cookie.secure ? '<span class="security-flag flag-secure">🔒 Secure</span>' : '<span class="security-flag flag-missing">❌ Not Secure</span>'}
+                    ${cookie.httpOnly ? '<span class="security-flag flag-httponly">🚫 HttpOnly</span>' : '<span class="security-flag flag-missing">❌ Not HttpOnly</span>'}
+                    ${cookie.sameSite ? '<span class="security-flag flag-samesite">🛡️ SameSite: ' + cookie.sameSite + '</span>' : '<span class="security-flag flag-missing">❌ No SameSite</span>'}
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <strong>Risk Assessment:</strong><br>
+                    <span class="risk-badge risk-${cookie.riskLevel}">${cookie.riskLevel.toUpperCase()} RISK</span>
+                </div>
+                
+                <div>
+                    <strong>Security Concerns:</strong>
+                    <ul>
+                        ${cookie.riskExplanation.map(risk => `<li>${risk}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+            
+            document.getElementById('cookieModal').style.display = 'flex';
+        }
+
+        function closeCookieModal() {
+            document.getElementById('cookieModal').style.display = 'none';
+        }
+
+        // Initialize scanner when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.cookieScanner = new CookieScanner();
+        });
+
+        // Close modal when clicking outside
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('cookieModal');
+            if (e.target === modal) {
+                closeCookieModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeCookieModal();
+            }
+        });
+    </script>
+</body>
+</html>

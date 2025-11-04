@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSRF Attack Demo - Cookies Exposed</title>
+    <meta name="description" content="Learn how Cross-Site Request Forgery (CSRF) attacks abuse cookies through interactive demonstrations">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="container">
+                <div class="nav-content">
+                    <a href="/" class="logo">
+                        <div class="logo-icon">🍪</div>
+                        Cookies Exposed
+                    </a>
+                    
+                    <ul class="nav-menu">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="cookie-scanner.html">Cookie Scanner</a></li>
+                        <li class="nav-dropdown">
+                            <a href="#" class="dropdown-toggle">Attack Demos ▼</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="session-hijacking.html">Session Hijacking</a></li>
+                                <li><a href="xss-demo.html">XSS Cookie Theft</a></li>
+                                <li><a href="csrf-demo.html" class="active">CSRF Attacks</a></li>
+                                <li><a href="mitm-demo.html">Man-in-the-Middle</a></li>
+                                <li><a href="cookie-poisoning.html">Cookie Poisoning</a></li>
+                                <li><a href="tracking-demo.html">Tracking & Profiling</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="privacy.html">Privacy</a></li>
+                    </ul>
+                    
+                    <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-secondary">
+        <div class="container">
+            <div class="hero-content">
+                <h1>🔄 CSRF Attack Demo</h1>
+                <p>Understand how Cross-Site Request Forgery tricks browsers into performing unwanted actions using your cookies</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Warning Section -->
+    <section class="section">
+        <div class="container">
+            <div class="alert" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52); color: white; text-align: center; margin-bottom: 2rem;">
+                <h3 style="margin-top: 0; color: white;">⚠️ Educational Simulation Only</h3>
+                <p style="margin-bottom: 0;">All CSRF demonstrations are safe simulations. No real transactions or account changes are made.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- What is CSRF -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>🔄 What is Cross-Site Request Forgery (CSRF)?</h2>
+                <p>CSRF tricks a user's browser into performing unwanted actions on a website where they're authenticated. The attack abuses the trust that a website has in the user's browser cookies.</p>
+                
+                <div class="csrf-flow">
+                    <h3>🔗 How CSRF Works:</h3>
+                    <div class="flow-steps">
+                        <div class="flow-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>User logs into Bank.com</h4>
+                                <p>Session cookie set: <code>sessionId=valid123</code></p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        
+                        <div class="flow-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>User visits Evil.com</h4>
+                                <p>Malicious site contains hidden attack</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        
+                        <div class="flow-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Browser auto-sends cookies</h4>
+                                <p>Attack request includes valid session</p>
+                            </div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        
+                        <div class="flow-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Bank.com processes request</h4>
+                                <p>Sees valid cookie, allows action</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="csrf-types mt-lg">
+                    <h3>Types of CSRF Attacks:</h3>
+                    <div class="grid grid-3">
+                        <div class="attack-type">
+                            <h4>💰 Financial Fraud</h4>
+                            <ul>
+                                <li>Transfer money to attacker</li>
+                                <li>Change payment methods</li>
+                                <li>Add attacker as payee</li>
+                                <li>Modify account settings</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="attack-type">
+                            <h4>📧 Account Takeover</h4>
+                            <ul>
+                                <li>Change email address</li>
+                                <li>Update password</li>
+                                <li>Add recovery questions</li>
+                                <li>Enable two-factor auth</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="attack-type">
+                            <h4>📱 Social Engineering</h4>
+                            <ul>
+                                <li>Post malicious content</li>
+                                <li>Send friend requests</li>
+                                <li>Change privacy settings</li>
+                                <li>Share attacker's content</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive CSRF Demo -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>🧪 Interactive CSRF Attack Simulation</h2>
+                
+                <!-- Banking Website Simulation -->
+                <div class="demo-section">
+                    <h3>Step 1: Login to SecureBank</h3>
+                    <div class="bank-simulation">
+                        <div class="bank-header">
+                            <h4>🏦 SecureBank.com - Online Banking</h4>
+                            <div class="login-status" id="bankLoginStatus">
+                                <span class="status-indicator">🔴</span> Not Logged In
+                            </div>
+                        </div>
+                        
+                        <div class="bank-content">
+                            <div class="login-section" id="bankLogin">
+                                <h5>Customer Login</h5>
+                                <div class="login-form">
+                                    <input type="text" placeholder="Username" value="john.doe" readonly>
+                                    <input type="password" placeholder="Password" value="••••••••" readonly>
+                                    <button id="bankLoginBtn" class="btn btn-primary">Login to Bank Account</button>
+                                </div>
+                            </div>
+                            
+                            <div class="account-dashboard" id="bankDashboard" style="display: none;">
+                                <h5>Account Dashboard</h5>
+                                <div class="account-info">
+                                    <div class="balance">
+                                        <strong>Current Balance: $<span id="currentBalance">5,432.10</span></strong>
+                                    </div>
+                                    <div class="session-info">
+                                        <strong>Session Cookie:</strong> <code id="bankSession">sessionId=bank_abc123def</code>
+                                    </div>
+                                </div>
+                                
+                                <div class="quick-transfer">
+                                    <h6>Quick Transfer</h6>
+                                    <div class="transfer-form">
+                                        <input type="text" id="transferTo" placeholder="Transfer to account">
+                                        <input type="number" id="transferAmount" placeholder="Amount ($)">
+                                        <button id="transferBtn" class="btn btn-success">Transfer Money</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="transaction-log">
+                                    <h6>Recent Transactions</h6>
+                                    <div id="transactionList">
+                                        <div class="transaction">Salary Deposit: +$3,200.00</div>
+                                        <div class="transaction">Rent Payment: -$1,200.00</div>
+                                        <div class="transaction">Groceries: -$156.78</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Malicious Website Simulation -->
+                <div class="demo-section mt-xl" id="maliciousSite" style="display: none;">
+                    <h3>Step 2: Visit "Innocent" Website</h3>
+                    <p>While still logged into the bank, you visit what appears to be a harmless website...</p>
+                    
+                    <div class="malicious-site">
+                        <div class="site-header">
+                            <h4>🐱 CuteCats.com - Adorable Cat Photos!</h4>
+                            <p>Share this page with friends!</p>
+                        </div>
+                        
+                        <div class="site-content">
+                            <div class="cat-gallery">
+                                <div class="cat-photo">🐱 Fluffy kitten sleeping</div>
+                                <div class="cat-photo">🐱 Cat playing with yarn</div>
+                                <div class="cat-photo">🐱 Tabby in sunlight</div>
+                            </div>
+                            
+                            <!-- Hidden CSRF Attack -->
+                            <div class="hidden-attack">
+                                <h5>🕵️ Hidden CSRF Attacks on This Page:</h5>
+                                <div class="attack-list">
+                                    <div class="csrf-attack">
+                                        <h6>Attack 1: Hidden Form</h6>
+                                        <div class="code-block">
+                                            <code>&lt;form action="https://securebank.com/transfer" method="POST" style="display:none"&gt;
+  &lt;input name="to" value="attacker@evil.com"&gt;
+  &lt;input name="amount" value="1000"&gt;
+&lt;/form&gt;
+&lt;script&gt;document.forms[0].submit();&lt;/script&gt;</code>
+                                        </div>
+                                        <button class="btn btn-danger attack-trigger" data-attack="form">Trigger Attack</button>
+                                    </div>
+                                    
+                                    <div class="csrf-attack">
+                                        <h6>Attack 2: Malicious Image</h6>
+                                        <div class="code-block">
+                                            <code>&lt;img src="https://securebank.com/transfer?to=attacker@evil.com&amp;amount=500" width="1" height="1"&gt;</code>
+                                        </div>
+                                        <button class="btn btn-danger attack-trigger" data-attack="image">Trigger Attack</button>
+                                    </div>
+                                    
+                                    <div class="csrf-attack">
+                                        <h6>Attack 3: JavaScript Fetch</h6>
+                                        <div class="code-block">
+                                            <code>fetch('https://securebank.com/api/transfer', {
+  method: 'POST',
+  credentials: 'include',
+  body: JSON.stringify({to: 'attacker@evil.com', amount: 2000})
+});</code>
+                                        </div>
+                                        <button class="btn btn-danger attack-trigger" data-attack="fetch">Trigger Attack</button>
+                                    </div>
+                                    
+                                    <div class="csrf-attack">
+                                        <h6>Attack 4: Link Click</h6>
+                                        <div class="code-block">
+                                            <code>&lt;a href="https://securebank.com/changeEmail?new=hacker@evil.com"&gt;
+  Click for a surprise!
+&lt;/a&gt;</code>
+                                        </div>
+                                        <button class="btn btn-danger attack-trigger" data-attack="link">Trigger Attack</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Attack Results -->
+                <div class="attack-results" id="csrfResults" style="display: none;">
+                    <div class="alert alert-danger">
+                        <h4>🚨 CSRF Attack Successful!</h4>
+                        <div id="attackDetails"></div>
+                        <div class="attack-explanation">
+                            <p><strong>What happened:</strong> The malicious website used your valid bank session cookie to perform unauthorized actions.</p>
+                            <p><strong>Why it worked:</strong> Your browser automatically included the bank's session cookie with the request, making it appear legitimate.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-World CSRF Examples -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>🌍 Real-World CSRF Attack Examples</h2>
+                
+                <div class="real-examples">
+                    <div class="example-case">
+                        <h3>Case 1: Netflix Account Hijacking (2006)</h3>
+                        <div class="case-details">
+                            <p><strong>Attack:</strong> Malicious website changed victims' Netflix email addresses</p>
+                            <p><strong>Method:</strong> Hidden iframe loaded Netflix account change page</p>
+                            <p><strong>Impact:</strong> Attackers gained control of thousands of accounts</p>
+                            <p><strong>Vector:</strong> <code>&lt;iframe src="netflix.com/ChangeEmail?newEmail=hacker@evil.com"&gt;</code></p>
+                        </div>
+                    </div>
+                    
+                    <div class="example-case">
+                        <h3>Case 2: Router Admin Panel Attacks (2008-Present)</h3>
+                        <div class="case-details">
+                            <p><strong>Attack:</strong> Websites change home router DNS settings</p>
+                            <p><strong>Method:</strong> Image tags targeting common router IPs (192.168.1.1)</p>
+                            <p><strong>Impact:</strong> Redirect all internet traffic through attacker's servers</p>
+                            <p><strong>Vector:</strong> <code>&lt;img src="http://192.168.1.1/dns?primary=evil.com"&gt;</code></p>
+                        </div>
+                    </div>
+                    
+                    <div class="example-case">
+                        <h3>Case 3: Social Media Spam (2009-2012)</h3>
+                        <div class="case-details">
+                            <p><strong>Attack:</strong> Force users to like/share malicious content</p>
+                            <p><strong>Method:</strong> Invisible buttons overlaid on legitimate content</p>
+                            <p><strong>Impact:</strong> Viral spread of spam and malware links</p>
+                            <p><strong>Vector:</strong> Clickjacking + CSRF combination attacks</p>
+                        </div>
+                    </div>
+                    
+                    <div class="example-case">
+                        <h3>Case 4: WordPress Admin Takeover (2010-2015)</h3>
+                        <div class="case-details">
+                            <p><strong>Attack:</strong> Create admin users on WordPress sites</p>
+                            <p><strong>Method:</strong> Forms targeting wp-admin/user-new.php</p>
+                            <p><strong>Impact:</strong> Complete website takeover and malware injection</p>
+                            <p><strong>Vector:</strong> Email links to malicious pages with hidden forms</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Defense Strategies -->
+    <section class="section">
+        <div class="container">
+            <div class="card">
+                <h2>🛡️ CSRF Prevention Strategies</h2>
+                
+                <div class="grid grid-2">
+                    <div>
+                        <h3>For Developers</h3>
+                        <div class="prevention-methods">
+                            <div class="method">
+                                <h4>1. CSRF Tokens</h4>
+                                <div class="code-block">
+                                    <code>&lt;form method="POST"&gt;
+  &lt;input type="hidden" name="csrf_token" 
+         value="abc123random456"&gt;
+  &lt;input name="amount" type="number"&gt;
+  &lt;button type="submit"&gt;Transfer&lt;/button&gt;
+&lt;/form&gt;</code>
+                                </div>
+                                <p>Unique, unpredictable tokens for each form</p>
+                            </div>
+                            
+                            <div class="method">
+                                <h4>2. SameSite Cookies</h4>
+                                <div class="code-block">
+                                    <code>Set-Cookie: sessionId=abc123; 
+  SameSite=Strict; Secure; HttpOnly</code>
+                                </div>
+                                <p>Prevents cross-site cookie transmission</p>
+                            </div>
+                            
+                            <div class="method">
+                                <h4>3. Origin/Referer Validation</h4>
+                                <div class="code-block">
+                                    <code>if (request.origin !== 'https://mybank.com') {
+  return error('Invalid origin');
+}</code>
+                                </div>
+                                <p>Check request source before processing</p>
+                            </div>
+                            
+                            <div class="method">
+                                <h4>4. Double Submit Cookies</h4>
+                                <div class="code-block">
+                                    <code>// Cookie: csrfToken=abc123
+// Form field: csrf=abc123
+if (cookie.csrfToken !== form.csrf) {
+  return error('CSRF detected');
+}</code>
+                                </div>
+                                <p>Compare cookie value with form value</p>
+                            </div>
+                            
+                            <div class="method">
+                                <h4>5. Custom Headers</h4>
+                                <div class="code-block">
+                                    <code>// Require custom header for AJAX
+if (!request.headers['X-Requested-With']) {
+  return error('Missing required header');
+}</code>
+                                </div>
+                                <p>Cross-domain requests can't set custom headers</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3>For Users</h3>
+                        <div class="user-protection">
+                            <h4>🚨 Warning Signs</h4>
+                            <ul>
+                                <li>Unexpected account changes or transactions</li>
+                                <li>Emails about actions you didn't perform</li>
+                                <li>New devices/locations in account logs</li>
+                                <li>Friends reporting strange messages from you</li>
+                                <li>Unknown applications connected to accounts</li>
+                            </ul>
+                            
+                            <h4>🛡️ Protection Tips</h4>
+                            <ul>
+                                <li><strong>Log out completely</strong> - Close banking tabs when done</li>
+                                <li><strong>Use separate browsers</strong> - Banking vs. casual browsing</li>
+                                <li><strong>Check URLs carefully</strong> - Don't click suspicious links while logged in</li>
+                                <li><strong>Enable notifications</strong> - Get alerts for account changes</li>
+                                <li><strong>Review activity regularly</strong> - Check transaction histories</li>
+                                <li><strong>Use incognito mode</strong> - For sensitive sites on shared computers</li>
+                                <li><strong>Keep browsers updated</strong> - Latest CSRF protections</li>
+                            </ul>
+                            
+                            <h4>🔍 How to Spot CSRF</h4>
+                            <div class="spotting-csrf">
+                                <p><strong>Look for:</strong></p>
+                                <ul>
+                                    <li>Forms without visible CSRF tokens</li>
+                                    <li>Suspicious links in emails/messages</li>
+                                    <li>Websites asking you to "click here while logged in"</li>
+                                    <li>Automatic form submissions</li>
+                                    <li>Hidden iframes on sketchy websites</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Interactive Security Quiz -->
+                <div class="csrf-quiz mt-xl">
+                    <h3>🧠 Test Your CSRF Knowledge</h3>
+                    <div class="quiz-questions">
+                        <div class="quiz-question">
+                            <p><strong>A user is logged into their bank account. They visit a malicious website that contains this code:</strong></p>
+                            <div class="code-block">
+                                <code>&lt;img src="https://bank.com/transfer?to=attacker&amount=1000"&gt;</code>
+                            </div>
+                            <p><strong>What happens?</strong></p>
+                            <div class="quiz-options">
+                                <label><input type="radio" name="csrf1" value="nothing"> Nothing, images can't make requests</label>
+                                <label><input type="radio" name="csrf1" value="money"> Money is transferred to the attacker</label>
+                                <label><input type="radio" name="csrf1" value="error"> Browser shows a security error</label>
+                                <label><input type="radio" name="csrf1" value="depends"> Depends on bank's CSRF protection</label>
+                            </div>
+                        </div>
+                        
+                        <div class="quiz-question mt-lg">
+                            <p><strong>Which SameSite setting provides the strongest CSRF protection?</strong></p>
+                            <div class="quiz-options">
+                                <label><input type="radio" name="csrf2" value="none"> SameSite=None</label>
+                                <label><input type="radio" name="csrf2" value="lax"> SameSite=Lax</label>
+                                <label><input type="radio" name="csrf2" value="strict"> SameSite=Strict</label>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary mt-lg" onclick="checkCSRFKnowledge()">Check Answers</button>
+                        <div id="csrfQuizResult" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation -->
+    <section class="section">
+        <div class="container">
+            <div class="navigation-cards">
+                <a href="mitm-demo.html" class="nav-card">
+                    <h3>Next: Man-in-the-Middle →</h3>
+                    <p>Learn about cookie interception attacks</p>
+                </a>
+                <a href="xss-demo.html" class="nav-card">
+                    <h3>← Previous: XSS Demo</h3>
+                    <p>Return to XSS cookie theft demo</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script src="app.js"></script>
+    <script>
+        let bankBalance = 5432.10;
+        let isLoggedIn = false;
+
+        // Bank login simulation
+        document.getElementById('bankLoginBtn').addEventListener('click', () => {
+            isLoggedIn = true;
+            document.getElementById('bankLoginStatus').innerHTML = '<span class="status-indicator">🟢</span> Logged In';
+            document.getElementById('bankLogin').style.display = 'none';
+            document.getElementById('bankDashboard').style.display = 'block';
+            document.getElementById('maliciousSite').style.display = 'block';
+            
+            // Scroll to show the malicious site
+            setTimeout(() => {
+                document.getElementById('maliciousSite').scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+        });
+
+        // Legitimate transfer
+        document.getElementById('transferBtn').addEventListener('click', () => {
+            const to = document.getElementById('transferTo').value;
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+            
+            if (to && amount && amount > 0 && amount <= bankBalance) {
+                bankBalance -= amount;
+                document.getElementById('currentBalance').textContent = bankBalance.toFixed(2);
+                
+                const transactionList = document.getElementById('transactionList');
+                const newTransaction = document.createElement('div');
+                newTransaction.className = 'transaction';
+                newTransaction.textContent = `Transfer to ${to}: -$${amount.toFixed(2)}`;
+                transactionList.insertBefore(newTransaction, transactionList.firstChild);
+                
+                // Clear form
+                document.getElementById('transferTo').value = '';
+                document.getElementById('transferAmount').value = '';
+                
+                alert(`Successfully transferred $${amount.toFixed(2)} to ${to}`);
+            } else {
+                alert('Invalid transfer details');
+            }
+        });
+
+        // CSRF attack simulations
+        document.querySelectorAll('.attack-trigger').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (!isLoggedIn) {
+                    alert('You must be logged into the bank first!');
+                    return;
+                }
+                
+                const attackType = e.target.dataset.attack;
+                simulateCSRFAttack(attackType);
+            });
+        });
+
+        function simulateCSRFAttack(type) {
+            const attacks = {
+                form: {
+                    description: 'Hidden form automatically submitted',
+                    action: 'Transfer $1,000 to attacker@evil.com',
+                    amount: 1000,
+                    target: 'attacker@evil.com'
+                },
+                image: {
+                    description: 'Malicious image triggered GET request',
+                    action: 'Transfer $500 to attacker@evil.com',
+                    amount: 500,
+                    target: 'attacker@evil.com'
+                },
+                fetch: {
+                    description: 'JavaScript fetch with credentials included',
+                    action: 'Transfer $2,000 to attacker@evil.com',
+                    amount: 2000,
+                    target: 'attacker@evil.com'
+                },
+                link: {
+                    description: 'Malicious link clicked',
+                    action: 'Email changed to hacker@evil.com',
+                    amount: 0,
+                    target: 'hacker@evil.com'
+                }
+            };
+            
+            const attack = attacks[type];
+            
+            // Simulate the attack effect
+            if (attack.amount > 0) {
+                bankBalance -= attack.amount;
+                document.getElementById('currentBalance').textContent = bankBalance.toFixed(2);
+                
+                const transactionList = document.getElementById('transactionList');
+                const maliciousTransaction = document.createElement('div');
+                maliciousTransaction.className = 'transaction malicious';
+                maliciousTransaction.style.color = 'red';
+                maliciousTransaction.style.fontWeight = 'bold';
+                maliciousTransaction.textContent = `CSRF ATTACK: Transfer to ${attack.target}: -$${attack.amount.toFixed(2)}`;
+                transactionList.insertBefore(maliciousTransaction, transactionList.firstChild);
+            }
+            
+            // Show attack results
+            const resultsDiv = document.getElementById('csrfResults');
+            const detailsDiv = document.getElementById('attackDetails');
+            
+            detailsDiv.innerHTML = `
+                <p><strong>Attack Method:</strong> ${attack.description}</p>
+                <p><strong>Action Performed:</strong> ${attack.action}</p>
+                <p><strong>Why it worked:</strong> Your browser automatically sent the bank session cookie with the malicious request</p>
+                <div class="attack-impact">
+                    <p>🚨 <strong>Impact:</strong> Unauthorized action performed without your knowledge!</p>
+                    ${attack.amount > 0 ? `<p>💰 <strong>Money stolen:</strong> $${attack.amount.toFixed(2)}</p>` : ''}
+                </div>
+            `;
+            
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function checkCSRFKnowledge() {
+            const answer1 = document.querySelector('input[name="csrf1"]:checked');
+            const answer2 = document.querySelector('input[name="csrf2"]:checked');
+            const result = document.getElementById('csrfQuizResult');
+            
+            let score = 0;
+            let feedback = '';
+            
+            if (answer1 && answer1.value === 'depends') {
+                score++;
+                feedback += '✅ Q1 Correct: The outcome depends on the bank\'s CSRF protection.<br>';
+            } else {
+                feedback += '❌ Q1 Incorrect: Image requests can trigger CSRF if the bank lacks protection.<br>';
+            }
+            
+            if (answer2 && answer2.value === 'strict') {
+                score++;
+                feedback += '✅ Q2 Correct: SameSite=Strict provides the strongest CSRF protection.<br>';
+            } else {
+                feedback += '❌ Q2 Incorrect: SameSite=Strict blocks all cross-site cookie transmission.<br>';
+            }
+            
+            result.innerHTML = `
+                <div class="quiz-result">
+                    <h4>Your Score: ${score}/2</h4>
+                    ${feedback}
+                    ${score === 2 ? '<p class="text-success">🎉 Excellent! You understand CSRF well.</p>' : '<p class="text-warning">💡 Review the content above to learn more about CSRF protection.</p>'}
+                </div>
+            `;
+            
+            result.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
